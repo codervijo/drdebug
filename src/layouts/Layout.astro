@@ -1,0 +1,17 @@
+---
+// src/layouts/Layout.astro — shared app shell (html / head meta / global styles).
+// Page-specific SEO tags are passed in via the `head` slot so each page owns its copy.
+import "../styles/global.css";
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <slot name="head" />
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>
