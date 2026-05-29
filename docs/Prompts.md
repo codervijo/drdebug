@@ -41,3 +41,9 @@ to surface "last AI prompt" per project. Keep entries append-only.
 > since no verbatim Relay error strings were findable publicly. Documented the
 > /fix/ route structure, content schema, and "how to add a new error page" in
 > AI_AGENTS.md.
+
+## 2026-05-28 — track /fix/ todos in lamill.toml
+
+> Record the shipped + outstanding /fix/ error-fix work as [[todo]] entries in
+> lamill.toml (3 done, 5 open with priorities — verify Lindy/n8n drafts live,
+> capture real Relay strings, GSC sitemap submit, decide on pnpm-lock.yaml).

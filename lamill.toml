@@ -6,3 +6,44 @@ production_branch = "main"
 custom_domains = [
     "drdebug.dev",
 ]
+
+# Tracked todos for the /fix/ programmatic-SEO error-fix section.
+# status: "done" | "open". Drafts ship as verified=false (noindex) until
+# confirmed against the live platform.
+
+[[todo]]
+status = "done"
+task = "Build /fix/ pSEO section: errors content collection + Zod schema, dynamic route, /fix/ + per-platform indexes, screenshots convention, sitemap integration"
+
+[[todo]]
+status = "done"
+task = "Add verification gate (verified/confidence/verificationNote/sources/optional lastVerified) + draft banner + noindex + draft pills"
+
+[[todo]]
+status = "done"
+task = "Draft 6 real sourced errors (n8n x3 high-confidence, Lindy x3 medium); document schema + route structure + how-to-add in AI_AGENTS.md"
+
+[[todo]]
+status = "open"
+priority = "high"
+task = "Verify Lindy drafts (x3, medium confidence) against the live platform — confirm exact UI strings, then set verified=true + lastVerified"
+
+[[todo]]
+status = "open"
+priority = "medium"
+task = "Verify n8n drafts (x3) against live n8n — spot-check exact wording across versions, then set verified=true + lastVerified"
+
+[[todo]]
+status = "open"
+priority = "medium"
+task = "Relay: capture verbatim error strings from a live relay.app workspace (no public corpus found) and replace relay-placeholder.json"
+
+[[todo]]
+status = "open"
+priority = "medium"
+task = "GSC post-deploy: verify sc-domain:drdebug.dev and submit https://drdebug.dev/sitemap-index.xml"
+
+[[todo]]
+status = "open"
+priority = "low"
+task = "Decide whether to commit pnpm-lock.yaml (AI_AGENTS.md says it should be the one tracked lockfile; currently untracked)"
