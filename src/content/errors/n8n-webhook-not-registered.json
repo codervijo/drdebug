@@ -1,0 +1,51 @@
+{
+  "platform": "n8n",
+  "errorMessage": "The requested webhook \"[METHOD] [path]\" is not registered.\nClick the 'Execute workflow' button on the canvas, then try again. (404 not found)",
+  "slug": "webhook-not-registered",
+  "plainLanguageMeaning": "n8n received a call to your webhook URL but isn't currently listening on that address, so it returned a 404 (not found). Usually it means you used the test URL without first pressing the run button, or you used the test URL when you should be using the live one.",
+  "causes": [
+    {
+      "title": "Using the test URL without clicking 'Execute workflow' first",
+      "explanation": "The test webhook URL (the one containing /webhook-test/) only listens for ONE call, and only after you click 'Execute workflow' on the canvas. If you call it before clicking, or call it twice, you get this error. This is the single most common cause.",
+      "frequency": "common"
+    },
+    {
+      "title": "Workflow is not activated, but the production URL was used",
+      "explanation": "The production URL (containing /webhook/) only works when the workflow is switched ON using the Active toggle in the top-right. If the toggle is off, the production endpoint is not registered.",
+      "frequency": "common"
+    },
+    {
+      "title": "Test and production are different paths, used interchangeably",
+      "explanation": "Operators often assume the same URL works in both modes. Test is /webhook-test/<path> and production is /webhook/<path> — they are genuinely different endpoints, not one URL in two modes.",
+      "frequency": "common"
+    },
+    {
+      "title": "HTTP method mismatch (e.g. sending GET to a POST webhook)",
+      "explanation": "If the caller uses a different HTTP method than the webhook node is set to, n8n treats it as an unregistered route. Frequency is an estimate based on recurring forum reports.",
+      "frequency": "sometimes"
+    },
+    {
+      "title": "Activated via the REST API, or an imported webhook node",
+      "explanation": "There are confirmed reports where activating via API, or reusing an imported webhook node, fails to register the path; saving/activating through the UI editor fixes it.",
+      "frequency": "rare"
+    }
+  ],
+  "fixSteps": [
+    { "step": 1, "instruction": "Decide whether you are testing or running live. For a quick test you must use the Test URL; for real/scheduled use you must use the Production URL." },
+    { "step": 2, "instruction": "If testing: open the workflow, click the 'Execute workflow' (Listen for test event) button on the canvas FIRST, then immediately send your request to the test URL. It only accepts one call per click." },
+    { "step": 3, "instruction": "If running live: flip the 'Active' toggle in the top-right of the editor to ON, then use the Production URL (the one with /webhook/ in it, NOT /webhook-test/)." },
+    { "step": 4, "instruction": "Confirm the HTTP method your caller uses (GET, POST, etc.) exactly matches the method set in the webhook node." },
+    { "step": 5, "instruction": "If you imported this workflow from another instance and it still fails, delete the webhook trigger node, add a fresh one, save, and re-activate." },
+    { "step": 6, "instruction": "If you activated the workflow via the n8n API, re-save and re-activate it through the editor UI to force path registration." }
+  ],
+  "whyItHappens": "n8n registers webhook routes dynamically. Test routes are registered only for a short window after you press 'Execute workflow' and are torn down after a single execution; production routes are registered only while the workflow's Active flag is true. A request arriving when no matching route is registered returns a 404 with this message. The distinct test/production paths exist so test traffic never hits live automations.",
+  "relatedErrors": ["resource-could-not-be-found-404"],
+  "verified": false,
+  "confidence": "high",
+  "verificationNote": "Confirm the exact current UI wording — n8n has shipped both 'is not registred' (older builds, sic) and 'is not registered', and the hint line wording shifts between versions. Verify the test-mode single-call behavior matches the operator's n8n version.",
+  "sources": [
+    "https://community.n8n.io/t/the-requested-webhook-is-not-registered/7980",
+    "https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.webhook/",
+    "https://github.com/n8n-io/n8n/issues/15666"
+  ]
+}

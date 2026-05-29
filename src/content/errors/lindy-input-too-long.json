@@ -1,0 +1,37 @@
+{
+  "platform": "lindy",
+  "errorMessage": "The Input provided is too long",
+  "slug": "lindy-input-provided-too-long",
+  "plainLanguageMeaning": "Your agent tried to process more text/context than the underlying AI model can handle in one step, so it stopped instead of finishing.",
+  "causes": [
+    {
+      "title": "Too much context accumulated in the task",
+      "explanation": "Long conversation histories, large documents, or many earlier steps pile up and exceed the model's input window.",
+      "frequency": "common"
+    },
+    {
+      "title": "High-volume or noisy triggers feeding extra data",
+      "explanation": "Triggers that fire on lots of items pass large payloads into the agent, inflating the input size.",
+      "frequency": "sometimes"
+    },
+    {
+      "title": "Using a model with a smaller context window",
+      "explanation": "Some cheaper/older models accept less input, so the same task overflows them when it wouldn't overflow a larger model.",
+      "frequency": "sometimes"
+    }
+  ],
+  "fixSteps": [
+    { "step": 1, "instruction": "Open the Tasks Panel, click the errored task, and review what ran before the failure to see where the context got large." },
+    { "step": 2, "instruction": "Filter out unnecessary triggers or trim the data being passed in so less text reaches the agent." },
+    { "step": 3, "instruction": "Switch the step to a larger-context language model where appropriate." },
+    { "step": 4, "instruction": "Break the workflow into smaller steps so context resets between them instead of accumulating." }
+  ],
+  "whyItHappens": "AI models have a fixed maximum input size (context window). Lindy passes the agent's accumulated conversation, documents, and prior step outputs into each model call. When that total exceeds the model's limit, the call is rejected rather than truncated, surfacing as this error.",
+  "relatedErrors": ["lindy-trouble-completing-task"],
+  "verified": false,
+  "confidence": "medium",
+  "verificationNote": "Confirm the exact casing/punctuation of the string as it currently renders in the Lindy UI, and whether it appears in the Task History, Flow Editor, or a toast.",
+  "sources": [
+    "https://www.lindy.ai/academy-lessons/troubleshooting-lindy-101"
+  ]
+}

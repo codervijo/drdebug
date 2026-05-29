@@ -70,8 +70,29 @@ const errors = defineCollection({
     // exist, silently skipping the rest.
     relatedErrors: z.array(z.string()).default([]),
 
-    // When the content was last verified against the live platform.
-    lastVerified: z.coerce.date(),
+    // ── Verification gate ───────────────────────────────────────────────
+    // Entries default to UNVERIFIED drafts. The template shows a "draft"
+    // banner and emits <meta name="robots" content="noindex"> so drafts can't
+    // rank before a human confirms them. Flip `verified` to true ONLY after
+    // checking against the live platform, and set `lastVerified` at the same
+    // time. Index pages tag drafts with a "draft" pill.
+    verified: z.boolean().default(false),
+
+    // Self-rated confidence of the (unverified) draft. Helps you prioritize
+    // what to verify first. Drop/ignore once verified.
+    confidence: z.enum(["high", "medium", "low"]).optional(),
+
+    // What a human still needs to confirm against the live platform. Shown in
+    // the draft banner so the reviewer knows exactly what to check.
+    verificationNote: z.string().optional(),
+
+    // Source URLs the draft was built from (docs / forum threads). Rendered in
+    // the page footer to make verification fast.
+    sources: z.array(z.string()).default([]),
+
+    // When the content was last verified against the live platform. Required
+    // in spirit once `verified` is true; omitted for drafts.
+    lastVerified: z.coerce.date().optional(),
   }),
 });
 

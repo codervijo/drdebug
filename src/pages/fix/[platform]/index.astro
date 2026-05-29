@@ -64,8 +64,15 @@ const canonical = `/fix/${platform}/`;
                   href={`/fix/${e.data.platform}/${e.data.slug}/`}
                   class="flex h-full flex-col rounded-2xl border border-border bg-card p-5 shadow-sm transition hover:border-primary/40 hover:shadow-md"
                 >
-                  <span class="break-words font-mono text-sm font-medium text-foreground">
-                    {e.data.errorMessage}
+                  <span class="flex items-start gap-2">
+                    <span class="break-words font-mono text-sm font-medium text-foreground">
+                      {e.data.errorMessage}
+                    </span>
+                    {!e.data.verified && (
+                      <span class="mt-0.5 shrink-0 rounded-full bg-destructive/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-destructive">
+                        Draft
+                      </span>
+                    )}
                   </span>
                   <span class="mt-2 text-sm leading-relaxed text-muted-foreground">
                     {e.data.plainLanguageMeaning}

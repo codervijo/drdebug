@@ -1,0 +1,50 @@
+{
+  "platform": "n8n",
+  "errorMessage": "The resource you are requesting could not be found (404)",
+  "slug": "resource-could-not-be-found-404",
+  "plainLanguageMeaning": "The outside service your node is calling said 'I don't have anything at that address.' Something about the URL, the ID, or the request method is wrong, so the service can't find what you asked for.",
+  "causes": [
+    {
+      "title": "Wrong or mistyped URL / endpoint path",
+      "explanation": "A typo, an extra/missing slash, the wrong API version in the path, or a stale endpoint all produce a 404. This is the most common underlying cause across nodes.",
+      "frequency": "common"
+    },
+    {
+      "title": "An ID or resource that doesn't exist (or was deleted)",
+      "explanation": "Referencing a record/file/user ID the service no longer has — often because an expression upstream resolved to the wrong or an empty value.",
+      "frequency": "common"
+    },
+    {
+      "title": "Wrong HTTP method for the endpoint",
+      "explanation": "Some APIs return 404 (instead of 405) when you hit a real path with an unsupported method. A confirmed forum case: an API only accepted POST, and a GET returned this 404.",
+      "frequency": "sometimes"
+    },
+    {
+      "title": "Special characters in the path not URL-encoded",
+      "explanation": "Slashes, spaces, or colons in a file path or key can break the lookup unless URL-encoded.",
+      "frequency": "sometimes"
+    },
+    {
+      "title": "Expression in the URL field resolving to blank/undefined",
+      "explanation": "If an n8n expression building the URL evaluates to nothing, the request goes to an incomplete URL and 404s. Frequency is an estimate based on recurring reports.",
+      "frequency": "sometimes"
+    }
+  ],
+  "fixSteps": [
+    { "step": 1, "instruction": "Open the failing node's output/error detail and read the full URL n8n actually called. Hover the URL field to see the resolved value of any expressions." },
+    { "step": 2, "instruction": "Compare that exact URL against the service's API documentation — check for typos, wrong API version, and missing or extra slashes." },
+    { "step": 3, "instruction": "Confirm the HTTP method (GET/POST/PUT/DELETE) matches what the endpoint requires; switch it if the docs say so." },
+    { "step": 4, "instruction": "Verify any ID or resource name in the URL actually exists and is current — test it directly in the service's UI." },
+    { "step": 5, "instruction": "If the path contains spaces, slashes, or special characters from your data, URL-encode them." },
+    { "step": 6, "instruction": "Re-check authentication/credentials: some services return 404 instead of 403 for resources your token can't see." }
+  ],
+  "whyItHappens": "A 404 is returned by the remote API, not by n8n itself — n8n is just relaying it. It means the request reached the server but the server has no resource at that address with that method. Because n8n builds URLs from expressions and credentials at runtime, the most frequent root cause is a URL that resolved differently than the operator expected.",
+  "relatedErrors": ["webhook-not-registered"],
+  "verified": false,
+  "confidence": "high",
+  "verificationNote": "The exact suffix wording ('Request failed with status code 404' vs bare '404') varies by node and version. Confirm which API is being called, since the precise fix depends on that provider's docs.",
+  "sources": [
+    "https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.httprequest/common-issues/",
+    "https://community.n8n.io/t/the-resource-you-are-requesting-could-not-be-found-404/103948"
+  ]
+}

@@ -29,3 +29,15 @@ to surface "last AI prompt" per project. Keep entries append-only.
 > meaning) + sitemap integration; `public/screenshots/` README with the
 > `[platform]-[error-slug]-step-[n].png` naming convention. Reuse the existing
 > waitlist component; no backend; do not invent error text/causes/fixes.
+
+## 2026-05-28 — real error-fix drafts + verification gate
+
+> Move from scaffold to real content via "I research + draft, you verify":
+> added a verification gate to the schema (verified default false, confidence,
+> verificationNote, sources, optional lastVerified) — drafts show a "do not
+> ship" banner, emit noindex, and get a "draft" pill in the indexes. Researched
+> real, sourced errors from public docs/forums and drafted 6 entries (3 n8n
+> high-confidence, 3 Lindy medium-confidence); kept Relay as a placeholder
+> since no verbatim Relay error strings were findable publicly. Documented the
+> /fix/ route structure, content schema, and "how to add a new error page" in
+> AI_AGENTS.md.

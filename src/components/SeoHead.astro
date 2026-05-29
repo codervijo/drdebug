@@ -14,14 +14,17 @@ interface Props {
   canonical: string;
   /** Optional JSON-LD object injected as ld+json. */
   jsonLd?: unknown;
+  /** Emit <meta robots noindex> — used for unverified draft pages. */
+  noindex?: boolean;
 }
 
-const { title, description, canonical, jsonLd } = Astro.props;
+const { title, description, canonical, jsonLd, noindex } = Astro.props;
 const canonicalUrl = canonical.startsWith("http") ? canonical : `${site}${canonical}`;
 ---
 
 <title>{title}</title>
 <meta name="description" content={description} />
+{noindex && <meta name="robots" content="noindex, follow" />}
 <link rel="canonical" href={canonicalUrl} />
 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 

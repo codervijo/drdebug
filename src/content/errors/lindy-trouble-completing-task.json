@@ -1,0 +1,37 @@
+{
+  "platform": "lindy",
+  "errorMessage": "My apologies [Name], I'm having trouble completing this task.",
+  "slug": "lindy-trouble-completing-task",
+  "plainLanguageMeaning": "The agent gave up on the task because it didn't know how to finish it, lacked the right tool, or didn't understand the instructions.",
+  "causes": [
+    {
+      "title": "No clear exit condition",
+      "explanation": "On complex or multi-skill tasks the agent doesn't know when it's 'done', so it stalls and reports trouble.",
+      "frequency": "common"
+    },
+    {
+      "title": "Missing or wrong skills",
+      "explanation": "The agent lacks a skill/action needed to actually perform the task, or has too many skills (Lindy recommends keeping it under ~4 per agent).",
+      "frequency": "common"
+    },
+    {
+      "title": "Vague or unclear prompt",
+      "explanation": "Instructions are ambiguous, so the agent can't determine what to do.",
+      "frequency": "common"
+    }
+  ],
+  "fixSteps": [
+    { "step": 1, "instruction": "Open the Tasks Panel and select the errored task to see exactly what the agent attempted before stopping." },
+    { "step": 2, "instruction": "Add a clear exit condition so the agent knows when the task is complete." },
+    { "step": 3, "instruction": "Make sure the agent has the skills it needs, and remove extras (aim for 4 or fewer skills per agent)." },
+    { "step": 4, "instruction": "Rewrite the prompt to be specific and unambiguous, then re-run the task." }
+  ],
+  "whyItHappens": "This is the agent's fallback response when its reasoning loop can't reach a successful completion. It usually reflects a configuration gap (missing skill, no stopping rule, or unclear instructions) rather than a platform outage, which is why the fix is almost always editing the agent setup.",
+  "relatedErrors": ["lindy-input-provided-too-long"],
+  "verified": false,
+  "confidence": "medium",
+  "verificationNote": "This is a generated agent message, so exact text can vary (the [Name] is a placeholder for the recipient). Confirm the live phrasing and whether wording varies by agent type.",
+  "sources": [
+    "https://www.lindy.ai/academy-lessons/troubleshooting-lindy-101"
+  ]
+}

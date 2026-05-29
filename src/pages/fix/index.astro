@@ -27,6 +27,7 @@ const items: ErrorItem[] = ordered.map((e) => ({
   errorMessage: e.data.errorMessage,
   plainLanguageMeaning: e.data.plainLanguageMeaning,
   url: `/fix/${e.data.platform}/${e.data.slug}/`,
+  verified: e.data.verified,
 }));
 
 const tabs = [

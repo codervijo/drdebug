@@ -1,0 +1,38 @@
+{
+  "platform": "lindy",
+  "errorMessage": "Task Stopped Due to Insufficient Credits",
+  "slug": "lindy-task-stopped-insufficient-credits",
+  "plainLanguageMeaning": "Your account ran out of monthly credits, so Lindy paused your agents and put new tasks on hold until you have credits again.",
+  "causes": [
+    {
+      "title": "Monthly credit allowance exhausted",
+      "explanation": "Credits don't roll over between billing cycles; once they're spent, agents pause until the cycle resets or you upgrade.",
+      "frequency": "common"
+    },
+    {
+      "title": "An agent looping and burning credits fast",
+      "explanation": "When an agent gets stuck on something it can't solve, it can loop and consume credits rapidly, draining the balance unexpectedly.",
+      "frequency": "sometimes"
+    },
+    {
+      "title": "High-volume triggers driving many runs",
+      "explanation": "Triggers that fire frequently multiply credit usage and can exhaust the balance faster than expected.",
+      "frequency": "sometimes"
+    }
+  ],
+  "fixSteps": [
+    { "step": 1, "instruction": "Once you have credits again, manually retry the stopped task from the Tasks View." },
+    { "step": 2, "instruction": "Go to Settings > Billing to upgrade your plan if you frequently hit the limit." },
+    { "step": 3, "instruction": "Reduce consumption: filter high-volume triggers, switch steps to cheaper models, and add exit conditions so agents don't loop." },
+    { "step": 4, "instruction": "Watch for the low-credit email notification Lindy sends so you can act before agents pause." }
+  ],
+  "whyItHappens": "Lindy meters usage in credits that reset each billing cycle and do not carry over. Every model call and action spends credits, so a busy or looping agent can deplete the balance; when it hits zero, Lindy pauses execution rather than running up an unbounded bill, and queues new tasks until credits are restored.",
+  "relatedErrors": [],
+  "verified": false,
+  "confidence": "medium",
+  "verificationNote": "The official credits doc describes this behavior but does not quote a verbatim string — confirm the exact UI wording and where it appears (Task History vs. email), and current plan credit numbers.",
+  "sources": [
+    "https://www.lindy.ai/academy-lessons/troubleshooting-lindy-101",
+    "https://docs.lindy.ai/account-billing/credits"
+  ]
+}

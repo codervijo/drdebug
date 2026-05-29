@@ -8,6 +8,7 @@ export interface ErrorItem {
   errorMessage: string;
   plainLanguageMeaning: string;
   url: string;
+  verified: boolean;
 }
 
 interface PlatformTab {
@@ -124,8 +125,15 @@ export default function ErrorFilter({
                       href={it.url}
                       className="flex h-full flex-col rounded-2xl border border-border bg-card p-5 shadow-sm transition hover:border-primary/40 hover:shadow-md"
                     >
-                      <span className="break-words font-mono text-sm font-medium text-foreground">
-                        {it.errorMessage}
+                      <span className="flex items-start gap-2">
+                        <span className="break-words font-mono text-sm font-medium text-foreground">
+                          {it.errorMessage}
+                        </span>
+                        {!it.verified && (
+                          <span className="mt-0.5 shrink-0 rounded-full bg-destructive/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-destructive">
+                            Draft
+                          </span>
+                        )}
                       </span>
                       <span className="mt-2 text-sm leading-relaxed text-muted-foreground">
                         {it.plainLanguageMeaning}

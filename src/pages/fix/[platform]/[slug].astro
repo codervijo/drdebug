@@ -61,23 +61,56 @@ const causes = [...d.causes].sort(
 // Fix steps in declared `step` order.
 const fixSteps = [...d.fixSteps].sort((a, b) => a.step - b.step);
 
-const lastVerified = d.lastVerified.toISOString().slice(0, 10);
+// lastVerified is optional (drafts don't have one yet).
+const lastVerified = d.lastVerified ? d.lastVerified.toISOString().slice(0, 10) : null;
+
+// Unverified drafts get a banner + noindex; verified pages emit JSON-LD.
+const isDraft = !d.verified;
 
 // Lightweight structured data derived only from real fields (nothing invented).
-const jsonLd = {
-  "@context": "https://schema.org",
-  "@type": "TechArticle",
-  headline: `${d.errorMessage} — ${platform} error fix`,
-  description: d.plainLanguageMeaning,
-  dateModified: lastVerified,
-  about: { "@type": "SoftwareApplication", name: platform },
-  publisher: { "@type": "Organization", name: "Doctor Debug", url: "https://drdebug.dev/" },
-};
+// Only emitted for verified pages — we don't want drafts advertising freshness.
+const jsonLd = isDraft
+  ? undefined
+  : {
+      "@context": "https://schema.org",
+      "@type": "TechArticle",
+      headline: `${d.errorMessage} — ${platform} error fix`,
+      description: d.plainLanguageMeaning,
+      ...(lastVerified ? { dateModified: lastVerified } : {}),
+      about: { "@type": "SoftwareApplication", name: platform },
+      publisher: { "@type": "Organization", name: "Doctor Debug", url: "https://drdebug.dev/" },
+    };
 ---
 
-<FixLayout title={title} description={description} canonical={canonical} jsonLd={jsonLd}>
+<FixLayout
+  title={title}
+  description={description}
+  canonical={canonical}
+  jsonLd={jsonLd}
+  noindex={isDraft}
+>
   <article class="px-5 py-10 sm:px-8 sm:py-14">
     <div class="mx-auto max-w-3xl">
+      {
+        isDraft && (
+          <div class="mb-6 rounded-2xl border border-destructive/30 bg-destructive/10 p-4 text-sm">
+            <p class="font-semibold text-destructive">⚠ Unverified draft — do not ship</p>
+            <p class="mt-1 text-foreground/80">
+              This page was drafted from public sources and has{" "}
+              <strong>not</strong> been confirmed against the live {platform} platform.
+              It is <code class="rounded bg-muted px-1">noindex</code> until verified.
+              {d.confidence && <> Draft confidence: <strong>{d.confidence}</strong>.</>}
+            </p>
+            {d.verificationNote && (
+              <p class="mt-2 text-muted-foreground">
+                <span class="font-medium text-foreground/80">To verify:</span>{" "}
+                {d.verificationNote}
+              </p>
+            )}
+          </div>
+        )
+      }
+
       <!-- Breadcrumb -->
       <nav class="mb-6 flex items-center gap-2 text-sm text-muted-foreground" aria-label="Breadcrumb">
         <a href="/fix/" class="transition hover:text-foreground">Fixes</a>
@@ -210,8 +243,36 @@ const jsonLd = {
         )
       }
 
+      <!-- Sources (shown for drafts so verification is fast; kept for
+           verified pages as provenance) -->
+      {
+        d.sources.length > 0 && (
+          <section class="mt-12">
+            <h2 class="text-sm font-semibold uppercase tracking-wider text-muted-foreground">
+              Sources
+            </h2>
+            <ul class="mt-3 space-y-1">
+              {d.sources.map((url) => (
+                <li class="truncate text-sm">
+                  <a
+                    href={url}
+                    rel="nofollow noopener"
+                    target="_blank"
+                    class="text-primary underline-offset-2 hover:underline"
+                  >
+                    {url}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )
+      }
+
       <!-- Footer meta + bottom waitlist CTA -->
-      <p class="mt-12 text-xs text-muted-foreground">Last verified {lastVerified}.</p>
+      <p class="mt-12 text-xs text-muted-foreground">
+        {lastVerified ? `Last verified ${lastVerified}.` : "Unverified draft — pending review."}
+      </p>
 
       <div class="mt-4">
         <WaitlistCTA id="fix-cta-bottom" />

@@ -21,6 +21,6 @@
     { "step": 3, "instruction": "[PLACEHOLDER — third fix step.]" }
   ],
   "whyItHappens": "[PLACEHOLDER — optional longer technical explanation. Delete this field if not needed.]",
-  "relatedErrors": ["lindy-placeholder", "n8n-placeholder"],
+  "relatedErrors": [],
   "lastVerified": "2020-01-01"
 }
