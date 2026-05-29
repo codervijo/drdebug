@@ -1,0 +1,31 @@
+{
+  "platform": "lindy",
+  "errorMessage": "[PLACEHOLDER — replace with the real Lindy error text]",
+  "slug": "lindy-placeholder",
+  "plainLanguageMeaning": "[PLACEHOLDER — 1–2 sentence plain-language explanation of what this error actually means for the operator. Do not ship this placeholder.]",
+  "causes": [
+    {
+      "title": "[PLACEHOLDER — most likely cause]",
+      "explanation": "[PLACEHOLDER — explain this cause in plain language.]",
+      "frequency": "common"
+    },
+    {
+      "title": "[PLACEHOLDER — occasional cause]",
+      "explanation": "[PLACEHOLDER — explain this cause in plain language.]",
+      "frequency": "sometimes"
+    },
+    {
+      "title": "[PLACEHOLDER — rare cause]",
+      "explanation": "[PLACEHOLDER — explain this cause in plain language.]",
+      "frequency": "rare"
+    }
+  ],
+  "fixSteps": [
+    { "step": 1, "instruction": "[PLACEHOLDER — first fix step.]" },
+    { "step": 2, "instruction": "[PLACEHOLDER — second fix step.]" },
+    { "step": 3, "instruction": "[PLACEHOLDER — third fix step.]" }
+  ],
+  "whyItHappens": "[PLACEHOLDER — optional longer technical explanation of the underlying cause. Delete this field if not needed.]",
+  "relatedErrors": ["n8n-placeholder", "relay-placeholder"],
+  "lastVerified": "2020-01-01"
+}

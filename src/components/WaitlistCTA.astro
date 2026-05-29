@@ -1,0 +1,32 @@
+---
+// src/components/WaitlistCTA.astro
+//
+// The repeated waitlist call-to-action used on the /fix/ error pages. Static
+// banner markup (Astro) wrapping the shared React WaitlistForm island, so only
+// the form hydrates. `id` must be unique per instance on a page.
+import WaitlistForm from "./WaitlistForm.tsx";
+
+interface Props {
+  id: string;
+  /** Optional override for the headline. */
+  heading?: string;
+}
+
+const {
+  id,
+  heading = "Doctor Debug catches these automatically — join the waitlist",
+} = Astro.props;
+---
+
+<aside class="rounded-3xl border border-primary/20 bg-card p-6 shadow-sm ring-1 ring-primary/10 sm:p-8">
+  <p class="text-lg font-semibold tracking-tight text-foreground sm:text-xl">
+    {heading}
+  </p>
+  <p class="mt-2 text-sm text-muted-foreground">
+    Stop translating cryptic errors by hand. Get plain-English fixes the moment
+    your no-code agent breaks.
+  </p>
+  <div class="mt-5 max-w-xl">
+    <WaitlistForm id={id} client:visible />
+  </div>
+</aside>

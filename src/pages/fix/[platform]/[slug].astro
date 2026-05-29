@@ -1,0 +1,221 @@
+---
+// src/pages/fix/[platform]/[slug].astro
+//
+// One rendered error-fix page per entry in the `errors` content collection.
+// Route: /fix/<platform>/<slug>. NOTE: the filename is [slug].astro, not
+// [error-slug] — Astro param names must match /^[a-zA-Z0-9_$]+$/ (no hyphens);
+// only the slug *value* may contain hyphens.
+// Designed for the "panicked operator" skim:
+// the exact error and its plain-language meaning are first, causes are ranked
+// by frequency, fix steps are numbered with screenshot slots, and the waitlist
+// CTA repeats mid-page and at the bottom.
+import { getCollection } from "astro:content";
+import FixLayout from "../../../layouts/FixLayout.astro";
+import WaitlistCTA from "../../../components/WaitlistCTA.astro";
+import {
+  platformLabel,
+  FREQUENCY_RANK,
+  FREQUENCY_LABEL,
+  FREQUENCY_CLASS,
+  PLATFORMS,
+} from "../../../lib/platforms.ts";
+
+export async function getStaticPaths() {
+  const all = await getCollection("errors");
+
+  return all.map((entry) => {
+    // Resolve related slugs to real entries so we can build links with the
+    // correct platform. Unknown slugs (content not written yet) are dropped.
+    const related = entry.data.relatedErrors
+      .map((slug) => all.find((e) => e.data.slug === slug))
+      .filter((e): e is (typeof all)[number] => Boolean(e))
+      .map((e) => ({
+        slug: e.data.slug,
+        platform: e.data.platform,
+        errorMessage: e.data.errorMessage,
+      }));
+
+    return {
+      params: { platform: entry.data.platform, slug: entry.data.slug },
+      props: { entry, related },
+    };
+  });
+}
+
+const { entry, related } = Astro.props;
+const d = entry.data;
+
+const platform = platformLabel(d.platform);
+const badgeClass = PLATFORMS[d.platform]?.badgeClass ?? "bg-secondary text-secondary-foreground";
+
+// SEO: title pattern + description from the plain-language meaning.
+const title = `${d.errorMessage} — ${platform} error fix | Doctor Debug`;
+const description = d.plainLanguageMeaning;
+const canonical = `/fix/${d.platform}/${d.slug}/`;
+
+// Causes ranked common → sometimes → rare (stable within a tier).
+const causes = [...d.causes].sort(
+  (a, b) => (FREQUENCY_RANK[a.frequency] ?? 99) - (FREQUENCY_RANK[b.frequency] ?? 99),
+);
+
+// Fix steps in declared `step` order.
+const fixSteps = [...d.fixSteps].sort((a, b) => a.step - b.step);
+
+const lastVerified = d.lastVerified.toISOString().slice(0, 10);
+
+// Lightweight structured data derived only from real fields (nothing invented).
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  headline: `${d.errorMessage} — ${platform} error fix`,
+  description: d.plainLanguageMeaning,
+  dateModified: lastVerified,
+  about: { "@type": "SoftwareApplication", name: platform },
+  publisher: { "@type": "Organization", name: "Doctor Debug", url: "https://drdebug.dev/" },
+};
+---
+
+<FixLayout title={title} description={description} canonical={canonical} jsonLd={jsonLd}>
+  <article class="px-5 py-10 sm:px-8 sm:py-14">
+    <div class="mx-auto max-w-3xl">
+      <!-- Breadcrumb -->
+      <nav class="mb-6 flex items-center gap-2 text-sm text-muted-foreground" aria-label="Breadcrumb">
+        <a href="/fix/" class="transition hover:text-foreground">Fixes</a>
+        <span aria-hidden="true">/</span>
+        <a href={`/fix/${d.platform}/`} class="transition hover:text-foreground">{platform}</a>
+      </nav>
+
+      <!-- 1 ─ Error message, prominent, with platform badge -->
+      <header>
+        <span class={`inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-wider ${badgeClass}`}>
+          {platform}
+        </span>
+        <h1 class="mt-4 break-words font-mono text-2xl font-semibold leading-snug tracking-tight text-foreground sm:text-3xl">
+          {d.errorMessage}
+        </h1>
+      </header>
+
+      <!-- 2 ─ Plain-language meaning callout -->
+      <div class="mt-6 rounded-2xl border border-primary/20 bg-accent/50 p-5 ring-1 ring-primary/10 sm:p-6">
+        <p class="text-xs font-semibold uppercase tracking-wider text-primary">What this means</p>
+        <p class="mt-2 text-lg leading-relaxed text-foreground">{d.plainLanguageMeaning}</p>
+      </div>
+
+      <!-- 3 ─ Causes ranked by frequency -->
+      {
+        causes.length > 0 && (
+          <section class="mt-12">
+            <h2 class="text-xl font-semibold tracking-tight text-foreground sm:text-2xl">
+              Why you're seeing this
+            </h2>
+            <ul class="mt-5 space-y-3">
+              {causes.map((c) => (
+                <li class="rounded-2xl border border-border bg-card p-5 shadow-sm">
+                  <div class="flex items-start justify-between gap-4">
+                    <h3 class="text-base font-semibold text-foreground">{c.title}</h3>
+                    <span
+                      class={`shrink-0 rounded-full px-2.5 py-0.5 text-xs font-medium ${FREQUENCY_CLASS[c.frequency] ?? "bg-muted text-muted-foreground"}`}
+                    >
+                      {FREQUENCY_LABEL[c.frequency] ?? c.frequency}
+                    </span>
+                  </div>
+                  <p class="mt-2 text-sm leading-relaxed text-muted-foreground">{c.explanation}</p>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )
+      }
+
+      <!-- 4 ─ Numbered fix steps with screenshot slots -->
+      {
+        fixSteps.length > 0 && (
+          <section class="mt-12">
+            <h2 class="text-xl font-semibold tracking-tight text-foreground sm:text-2xl">
+              How to fix it
+            </h2>
+            <ol class="mt-5 space-y-6">
+              {fixSteps.map((s) => (
+                <li class="flex gap-4">
+                  <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary text-sm font-semibold text-primary-foreground">
+                    {s.step}
+                  </span>
+                  <div class="flex-1">
+                    <p class="text-base leading-relaxed text-foreground">{s.instruction}</p>
+                    {s.screenshot ? (
+                      <img
+                        src={s.screenshot}
+                        alt={`${platform}: step ${s.step}`}
+                        loading="lazy"
+                        class="mt-3 w-full rounded-xl border border-border shadow-sm"
+                      />
+                    ) : (
+                      <div class="mt-3 flex h-40 items-center justify-center rounded-xl border border-dashed border-border bg-muted/40 text-xs text-muted-foreground">
+                        Screenshot slot — drop /screenshots/{d.platform}-{d.slug}-step-{s.step}.png
+                      </div>
+                    )}
+                  </div>
+                </li>
+              ))}
+            </ol>
+          </section>
+        )
+      }
+
+      <!-- Mid-page waitlist CTA -->
+      <div class="mt-12">
+        <WaitlistCTA id="fix-cta-mid" />
+      </div>
+
+      <!-- 5 ─ Optional "why this happens" expandable -->
+      {
+        d.whyItHappens && (
+          <section class="mt-12">
+            <details class="group rounded-2xl border border-border bg-card p-5 shadow-sm">
+              <summary class="flex cursor-pointer list-none items-center justify-between gap-4 text-base font-semibold text-foreground">
+                Why this happens (the technical detail)
+                <span class="text-muted-foreground transition group-open:rotate-180" aria-hidden="true">
+                  ▾
+                </span>
+              </summary>
+              <p class="mt-4 text-sm leading-relaxed text-muted-foreground">{d.whyItHappens}</p>
+            </details>
+          </section>
+        )
+      }
+
+      <!-- 6 ─ Related errors -->
+      {
+        related.length > 0 && (
+          <section class="mt-12">
+            <h2 class="text-xl font-semibold tracking-tight text-foreground sm:text-2xl">
+              Related errors
+            </h2>
+            <ul class="mt-5 space-y-2">
+              {related.map((r) => (
+                <li>
+                  <a
+                    href={`/fix/${r.platform}/${r.slug}/`}
+                    class="flex items-center justify-between gap-4 rounded-xl border border-border bg-card px-4 py-3 text-sm transition hover:border-primary/40 hover:shadow-sm"
+                  >
+                    <span class="font-mono text-foreground">{r.errorMessage}</span>
+                    <span class="shrink-0 text-xs uppercase tracking-wider text-muted-foreground">
+                      {platformLabel(r.platform)}
+                    </span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )
+      }
+
+      <!-- Footer meta + bottom waitlist CTA -->
+      <p class="mt-12 text-xs text-muted-foreground">Last verified {lastVerified}.</p>
+
+      <div class="mt-4">
+        <WaitlistCTA id="fix-cta-bottom" />
+      </div>
+    </div>
+  </article>
+</FixLayout>

@@ -1,0 +1,44 @@
+---
+// src/components/SeoHead.astro
+//
+// Per-page SEO meta tags for the /fix/ section. Drop inside the Layout's
+// `head` slot. Each page passes its own title/description/canonical so the
+// page still "owns its copy" (same convention as src/pages/index.astro), this
+// just removes the boilerplate repetition across many generated pages.
+const site = "https://drdebug.dev";
+
+interface Props {
+  title: string;
+  description: string;
+  /** Absolute or root-relative URL of this page. */
+  canonical: string;
+  /** Optional JSON-LD object injected as ld+json. */
+  jsonLd?: unknown;
+}
+
+const { title, description, canonical, jsonLd } = Astro.props;
+const canonicalUrl = canonical.startsWith("http") ? canonical : `${site}${canonical}`;
+---
+
+<title>{title}</title>
+<meta name="description" content={description} />
+<link rel="canonical" href={canonicalUrl} />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+<!-- Open Graph -->
+<meta property="og:type" content="article" />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={canonicalUrl} />
+<meta property="og:site_name" content="drdebug.dev" />
+
+<!-- Twitter card -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+
+{
+  jsonLd && (
+    <script type="application/ld+json" is:inline set:html={JSON.stringify(jsonLd)} />
+  )
+}

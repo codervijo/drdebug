@@ -1,0 +1,77 @@
+---
+// src/pages/fix/index.astro
+//
+// Index of every error-fix page, grouped by platform with client-side
+// search + platform filter (ErrorFilter island). Data is collected at build
+// time from the `errors` collection.
+import { getCollection } from "astro:content";
+import FixLayout from "../../layouts/FixLayout.astro";
+import ErrorFilter from "../../components/ErrorFilter.tsx";
+import type { ErrorItem } from "../../components/ErrorFilter.tsx";
+import { PLATFORM_ORDER, platformLabel } from "../../lib/platforms.ts";
+
+const all = await getCollection("errors");
+
+// Sort into a stable platform order, then alphabetically by error message.
+const ordered = [...all].sort((a, b) => {
+  const pa = PLATFORM_ORDER.indexOf(a.data.platform);
+  const pb = PLATFORM_ORDER.indexOf(b.data.platform);
+  if (pa !== pb) return pa - pb;
+  return a.data.errorMessage.localeCompare(b.data.errorMessage);
+});
+
+const items: ErrorItem[] = ordered.map((e) => ({
+  platform: e.data.platform,
+  platformLabel: platformLabel(e.data.platform),
+  slug: e.data.slug,
+  errorMessage: e.data.errorMessage,
+  plainLanguageMeaning: e.data.plainLanguageMeaning,
+  url: `/fix/${e.data.platform}/${e.data.slug}/`,
+}));
+
+const tabs = [
+  { key: "all", label: "All", count: items.length },
+  ...PLATFORM_ORDER.map((p) => ({
+    key: p,
+    label: platformLabel(p),
+    count: items.filter((it) => it.platform === p).length,
+  })),
+];
+
+const title = "AI agent error fixes — plain-English guides | Doctor Debug";
+const description =
+  "Browse plain-English fixes for common Lindy, n8n, and Relay agent errors. Find the exact error you're seeing and the steps to resolve it.";
+---
+
+<FixLayout title={title} description={description} canonical="/fix/">
+  <section class="px-5 py-12 sm:px-8 sm:py-16">
+    <div class="mx-auto max-w-5xl">
+      <div class="max-w-2xl">
+        <div class="mb-4 inline-flex items-center rounded-full border border-border bg-card px-3 py-1 text-xs font-medium uppercase tracking-wider text-muted-foreground">
+          Error fix library
+        </div>
+        <h1 class="text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
+          Plain-English fixes for broken AI agents
+        </h1>
+        <p class="mt-4 text-lg text-muted-foreground">
+          Find the exact error your no-code agent is throwing and get a clear
+          explanation plus the steps to fix it — no logs, no developer translation.
+        </p>
+      </div>
+
+      <div class="mt-10">
+        {
+          items.length === 0 ? (
+            <p class="rounded-2xl border border-dashed border-border bg-muted/30 p-8 text-center text-sm text-muted-foreground">
+              No error pages published yet. Add a JSON entry under
+              <code class="mx-1 rounded bg-muted px-1.5 py-0.5">src/content/errors/</code>
+              to get started.
+            </p>
+          ) : (
+            <ErrorFilter items={items} tabs={tabs} client:load />
+          )
+        }
+      </div>
+    </div>
+  </section>
+</FixLayout>

@@ -1,0 +1,85 @@
+---
+// src/pages/fix/[platform]/index.astro
+//
+// Per-platform index: lists every error-fix page for one platform. One static
+// page per platform in the closed set.
+import { getCollection } from "astro:content";
+import FixLayout from "../../../layouts/FixLayout.astro";
+import WaitlistCTA from "../../../components/WaitlistCTA.astro";
+import { PLATFORM_ORDER, platformLabel, type Platform } from "../../../lib/platforms.ts";
+
+export async function getStaticPaths() {
+  const all = await getCollection("errors");
+  return PLATFORM_ORDER.map((platform) => ({
+    params: { platform },
+    props: {
+      platform,
+      entries: all
+        .filter((e) => e.data.platform === platform)
+        .sort((a, b) => a.data.errorMessage.localeCompare(b.data.errorMessage)),
+    },
+  }));
+}
+
+interface Props {
+  platform: Platform;
+  entries: Awaited<ReturnType<typeof getCollection<"errors">>>;
+}
+
+const { platform, entries } = Astro.props as Props;
+const label = platformLabel(platform);
+
+const title = `${label} error fixes — plain-English guides | Doctor Debug`;
+const description = `Plain-English fixes for common ${label} AI agent errors. Find the exact error you're seeing and the steps to resolve it.`;
+const canonical = `/fix/${platform}/`;
+---
+
+<FixLayout title={title} description={description} canonical={canonical}>
+  <section class="px-5 py-12 sm:px-8 sm:py-16">
+    <div class="mx-auto max-w-3xl">
+      <!-- Breadcrumb -->
+      <nav class="mb-6 flex items-center gap-2 text-sm text-muted-foreground" aria-label="Breadcrumb">
+        <a href="/fix/" class="transition hover:text-foreground">Fixes</a>
+        <span aria-hidden="true">/</span>
+        <span class="text-foreground">{label}</span>
+      </nav>
+
+      <h1 class="text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
+        {label} error fixes
+      </h1>
+      <p class="mt-4 text-lg text-muted-foreground">
+        Plain-English explanations and step-by-step fixes for {label} agent errors.
+      </p>
+
+      {
+        entries.length === 0 ? (
+          <p class="mt-10 rounded-2xl border border-dashed border-border bg-muted/30 p-8 text-center text-sm text-muted-foreground">
+            No {label} error pages published yet.
+          </p>
+        ) : (
+          <ul class="mt-10 space-y-3">
+            {entries.map((e) => (
+              <li>
+                <a
+                  href={`/fix/${e.data.platform}/${e.data.slug}/`}
+                  class="flex h-full flex-col rounded-2xl border border-border bg-card p-5 shadow-sm transition hover:border-primary/40 hover:shadow-md"
+                >
+                  <span class="break-words font-mono text-sm font-medium text-foreground">
+                    {e.data.errorMessage}
+                  </span>
+                  <span class="mt-2 text-sm leading-relaxed text-muted-foreground">
+                    {e.data.plainLanguageMeaning}
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        )
+      }
+
+      <div class="mt-12">
+        <WaitlistCTA id="platform-cta" />
+      </div>
+    </div>
+  </section>
+</FixLayout>
