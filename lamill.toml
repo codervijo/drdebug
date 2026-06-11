@@ -11,6 +11,10 @@ custom_domains = [
     "drdebug.dev",
 ]
 
+[index]
+indexnow_key = "db135bd06672c458a8673d1609449a84"
+indexnow_enabled = true
+
 [stack]
 framework = "astro"
 
@@ -28,8 +32,7 @@ status = "done"
 task = "Draft 6 real sourced errors (n8n x3 high-confidence, Lindy x3 medium); document schema + route structure + how-to-add in AI_AGENTS.md"
 
 [[todo]]
-status = "open"
-priority = "high"
+status = "done"
 task = "Verify Lindy drafts (x3, medium confidence) against the live platform — confirm exact UI strings, then set verified=true + lastVerified"
 
 [[todo]]

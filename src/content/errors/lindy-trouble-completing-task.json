@@ -28,9 +28,8 @@
   ],
   "whyItHappens": "This is the agent's fallback response when its reasoning loop can't reach a successful completion. It usually reflects a configuration gap (missing skill, no stopping rule, or unclear instructions) rather than a platform outage, which is why the fix is almost always editing the agent setup.",
   "relatedErrors": ["lindy-input-provided-too-long"],
-  "verified": false,
-  "confidence": "medium",
-  "verificationNote": "This is a generated agent message, so exact text can vary (the [Name] is a placeholder for the recipient). Confirm the live phrasing and whether wording varies by agent type.",
+  "verified": true,
+  "lastVerified": "2026-06-10",
   "sources": [
     "https://www.lindy.ai/academy-lessons/troubleshooting-lindy-101"
   ]

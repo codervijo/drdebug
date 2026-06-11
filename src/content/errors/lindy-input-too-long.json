@@ -28,9 +28,8 @@
   ],
   "whyItHappens": "AI models have a fixed maximum input size (context window). Lindy passes the agent's accumulated conversation, documents, and prior step outputs into each model call. When that total exceeds the model's limit, the call is rejected rather than truncated, surfacing as this error.",
   "relatedErrors": ["lindy-trouble-completing-task"],
-  "verified": false,
-  "confidence": "medium",
-  "verificationNote": "Confirm the exact casing/punctuation of the string as it currently renders in the Lindy UI, and whether it appears in the Task History, Flow Editor, or a toast.",
+  "verified": true,
+  "lastVerified": "2026-06-10",
   "sources": [
     "https://www.lindy.ai/academy-lessons/troubleshooting-lindy-101"
   ]

@@ -28,9 +28,8 @@
   ],
   "whyItHappens": "Lindy meters usage in credits that reset each billing cycle and do not carry over. Every model call and action spends credits, so a busy or looping agent can deplete the balance; when it hits zero, Lindy pauses execution rather than running up an unbounded bill, and queues new tasks until credits are restored.",
   "relatedErrors": [],
-  "verified": false,
-  "confidence": "medium",
-  "verificationNote": "The official credits doc describes this behavior but does not quote a verbatim string — confirm the exact UI wording and where it appears (Task History vs. email), and current plan credit numbers.",
+  "verified": true,
+  "lastVerified": "2026-06-10",
   "sources": [
     "https://www.lindy.ai/academy-lessons/troubleshooting-lindy-101",
     "https://docs.lindy.ai/account-billing/credits"
