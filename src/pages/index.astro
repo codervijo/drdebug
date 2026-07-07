@@ -2,11 +2,59 @@
 // src/pages/index.astro
 import Layout from "../layouts/Layout.astro";
 import LandingPage from "../components/LandingPage.tsx";
+import { FAQS } from "../lib/faq.ts";
 
 const site = "https://drdebug.dev";
 const title = "Doctor Debug — Plain-English fixes for broken AI agents";
+// Meta description kept under ~155 chars for full SERP display.
 const description =
-  "Doctor Debug watches your no-code AI agents, catches failures, and tells you exactly what went wrong — no logs, no guesswork, no developer translation needed.";
+  "Doctor Debug watches your no-code AI agents and turns cryptic failures into plain-English fixes — no logs, no guesswork, no engineer needed.";
+const ogImage = `${site}/og-image.png`;
+
+// JSON-LD graph: Organization + WebSite + SoftwareApplication (pre-launch)
+// + FAQPage. FAQPage mirrors the visible FAQ section (both read src/lib/faq.ts)
+// so structured data always matches on-page content.
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": `${site}/#organization`,
+      name: "Doctor Debug",
+      url: `${site}/`,
+      logo: `${site}/favicon.svg`,
+      // [VERIFY: add real social/GitHub profile URLs]
+      sameAs: ["[VERIFY: add real social/GitHub profile URLs]"],
+    },
+    {
+      "@type": "WebSite",
+      "@id": `${site}/#website`,
+      url: `${site}/`,
+      name: "Doctor Debug",
+      publisher: { "@id": `${site}/#organization` },
+    },
+    {
+      "@type": "SoftwareApplication",
+      "@id": `${site}/#software`,
+      name: "Doctor Debug",
+      applicationCategory: "BusinessApplication",
+      operatingSystem: "Web",
+      url: `${site}/`,
+      description:
+        "Doctor Debug watches no-code AI agents on Lindy, Relay, n8n, Make, and Zapier and translates failures into plain-English fixes. Pre-launch — currently accepting waitlist signups.",
+      publisher: { "@id": `${site}/#organization` },
+    },
+    {
+      "@type": "FAQPage",
+      "@id": `${site}/#faq`,
+      mainEntity: FAQS.map((f) => ({
+        "@type": "Question",
+        name: f.q,
+        acceptedAnswer: { "@type": "Answer", text: f.a },
+      })),
+    },
+  ],
+};
 ---
 
 <Layout>
@@ -25,34 +73,19 @@ const description =
     />
     <meta property="og:url" content={site} />
     <meta property="og:site_name" content="drdebug.dev" />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
 
     <!-- Twitter card -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
 
-    <!-- JSON-LD structured data: Organization + WebSite (static; domain
-         is known at scaffold time. Update description by hand if needed.) -->
-    <script type="application/ld+json" is:inline>
-{
-  "@context": "https://schema.org",
-  "@graph": [
-    {
-      "@type": "Organization",
-      "@id": "https://drdebug.dev/#organization",
-      "name": "Doctor Debug",
-      "url": "https://drdebug.dev/"
-    },
-    {
-      "@type": "WebSite",
-      "@id": "https://drdebug.dev/#website",
-      "url": "https://drdebug.dev/",
-      "name": "Doctor Debug",
-      "publisher": { "@id": "https://drdebug.dev/#organization" }
-    }
-  ]
-}
-    </script>
+    <!-- JSON-LD: Organization + WebSite + SoftwareApplication + FAQPage.
+         Built in the frontmatter above; FAQPage mirrors the visible FAQ. -->
+    <script type="application/ld+json" is:inline set:html={JSON.stringify(jsonLd)} />
   </Fragment>
 
   <LandingPage client:load />

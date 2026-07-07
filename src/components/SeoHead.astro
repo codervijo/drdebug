@@ -16,10 +16,13 @@ interface Props {
   jsonLd?: unknown;
   /** Emit <meta robots noindex> — used for unverified draft pages. */
   noindex?: boolean;
+  /** Root-relative path to the social share image. Defaults to the site OG card. */
+  image?: string;
 }
 
-const { title, description, canonical, jsonLd, noindex } = Astro.props;
+const { title, description, canonical, jsonLd, noindex, image = "/og-image.png" } = Astro.props;
 const canonicalUrl = canonical.startsWith("http") ? canonical : `${site}${canonical}`;
+const imageUrl = image.startsWith("http") ? image : `${site}${image}`;
 ---
 
 <title>{title}</title>
@@ -34,11 +37,15 @@ const canonicalUrl = canonical.startsWith("http") ? canonical : `${site}${canoni
 <meta property="og:description" content={description} />
 <meta property="og:url" content={canonicalUrl} />
 <meta property="og:site_name" content="drdebug.dev" />
+<meta property="og:image" content={imageUrl} />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
 
 <!-- Twitter card -->
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content={title} />
 <meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={imageUrl} />
 
 {
   jsonLd && (

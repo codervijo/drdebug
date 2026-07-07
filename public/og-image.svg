@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" font-family="DejaVu Sans, ui-sans-serif, system-ui, sans-serif">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0d1326"/>
+      <stop offset="1" stop-color="#080b16"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.18" cy="0.12" r="0.9">
+      <stop offset="0" stop-color="#4f6ef2" stop-opacity="0.28"/>
+      <stop offset="1" stop-color="#4f6ef2" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#glow)"/>
+  <rect x="0" y="0" width="1200" height="6" fill="#4f6ef2"/>
+
+  <!-- brand lockup -->
+  <g transform="translate(90,86)">
+    <rect width="60" height="60" rx="14" fill="#4f6ef2"/>
+    <!-- stethoscope glyph (lucide), centered in the 60x60 tile -->
+    <g transform="translate(18,18)" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M11 2v2"/><path d="M5 2v2"/>
+      <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1"/>
+      <path d="M8 15a6 6 0 0 0 12 0v-3"/><circle cx="20" cy="10" r="2"/>
+    </g>
+    <text x="80" y="40" font-size="34" font-weight="700" fill="#f4f6fb">Doctor Debug</text>
+  </g>
+
+  <!-- headline -->
+  <text x="90" y="286" font-size="60" font-weight="700" fill="#f4f6fb">When your AI agent breaks,</text>
+  <text x="90" y="366" font-size="60" font-weight="700" fill="#4f6ef2">get a plain-English fix.</text>
+
+  <!-- subhead -->
+  <text x="92" y="438" font-size="29" font-weight="400" fill="#aab3cc">No logs, no guesswork, no developer translation needed.</text>
+
+  <!-- works-with row -->
+  <g transform="translate(90,522)">
+    <text x="0" y="20" font-size="21" font-weight="600" fill="#7c88a8" letter-spacing="2">WORKS WITH</text>
+    <text x="218" y="20" font-size="24" font-weight="600" fill="#dce1ee">Lindy · Relay · n8n · Make · Zapier</text>
+  </g>
+</svg>

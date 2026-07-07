@@ -47,3 +47,15 @@ to surface "last AI prompt" per project. Keep entries append-only.
 > Record the shipped + outstanding /fix/ error-fix work as [[todo]] entries in
 > lamill.toml (3 done, 5 open with priorities — verify Lindy/n8n drafts live,
 > capture real Relay strings, GSC sitemap submit, decide on pnpm-lock.yaml).
+
+## 2026-07-06 — on-page SEO hardening (OG image, structured data, footer pages)
+
+> Improve on-page SEO for the landing site: real 1200x630 OG image referenced in
+> og:image/twitter:image sitewide; expand homepage JSON-LD to Organization
+> (logo + sameAs [VERIFY]) + WebSite + SoftwareApplication (pre-launch) + FAQPage
+> driven from a shared src/lib/faq.ts that also renders a visible FAQ section
+> (so schema matches on-page content); real /privacy and /contact pages
+> replacing footer "#" links; crawlable homepage→/fix/ link; meta description
+> trimmed to 140 chars; sitemap filter excluding noindex drafts. Reconciled the
+> requested /fixes/ content layer with the existing /fix/ library (kept it as-is
+> per operator — no new invented pages, respecting the verify-before-index gate).

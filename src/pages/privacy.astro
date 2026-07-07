@@ -1,0 +1,80 @@
+---
+// src/pages/privacy.astro — minimal privacy policy for the pre-launch site.
+// The only personal data this site handles today is a waitlist email address.
+import FixLayout from "../layouts/FixLayout.astro";
+
+const title = "Privacy Policy | Doctor Debug";
+const description =
+  "How Doctor Debug handles the email address you share when joining the waitlist. We collect the minimum, never sell it, and delete it on request.";
+const updated = "July 6, 2026";
+---
+
+<FixLayout title={title} description={description} canonical="/privacy">
+  <article class="px-5 py-12 sm:px-8 sm:py-16">
+    <div class="mx-auto max-w-3xl">
+      <h1 class="text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
+        Privacy Policy
+      </h1>
+      <p class="mt-3 text-sm text-muted-foreground">Last updated {updated}.</p>
+
+      <div class="mt-8 space-y-6 text-base leading-relaxed text-muted-foreground">
+        <p>
+          Doctor Debug is a pre-launch product. This page explains what happens
+          to the information you share with this website today. We keep it short
+          because we collect very little.
+        </p>
+
+        <section>
+          <h2 class="text-xl font-semibold text-foreground">What we collect</h2>
+          <p class="mt-2">
+            The only personal information this site collects is the
+            <strong class="text-foreground">email address</strong> you enter to
+            join the waitlist. We do not ask for your name, company, or payment
+            details at this stage.
+          </p>
+        </section>
+
+        <section>
+          <h2 class="text-xl font-semibold text-foreground">How we use it</h2>
+          <p class="mt-2">
+            We use your email address only to tell you when Doctor Debug is
+            available, to invite you to the early pilot, and to occasionally ask
+            for feedback that shapes the product. We do not sell, rent, or share
+            your email address with third parties for their own marketing.
+          </p>
+        </section>
+
+        <section>
+          <h2 class="text-xl font-semibold text-foreground">Service providers</h2>
+          <p class="mt-2">
+            The site is served through Cloudflare, and waitlist emails are stored
+            with the tools we use to run the waitlist and send launch updates.
+            These providers process data on our behalf under their own security
+            and privacy terms.
+            <!-- [VERIFY: name the actual waitlist / email provider once finalized
+                 (e.g. the form backend and any email service) and link its DPA]. -->
+          </p>
+        </section>
+
+        <section>
+          <h2 class="text-xl font-semibold text-foreground">Your choices</h2>
+          <p class="mt-2">
+            You can ask us to remove your email address from the waitlist at any
+            time, and we will delete it. Every email we send also includes an
+            unsubscribe link. To make a request, use the
+            <a href="/contact" class="text-primary underline-offset-2 hover:underline">contact page</a>.
+          </p>
+        </section>
+
+        <section>
+          <h2 class="text-xl font-semibold text-foreground">Changes to this policy</h2>
+          <p class="mt-2">
+            As Doctor Debug launches and adds features, we will expand this policy
+            to cover any new data we handle, and we will update the date above
+            when we do.
+          </p>
+        </section>
+      </div>
+    </div>
+  </article>
+</FixLayout>

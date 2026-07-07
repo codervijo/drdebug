@@ -1,0 +1,61 @@
+---
+// src/pages/contact.astro — minimal contact page for the pre-launch site.
+import FixLayout from "../layouts/FixLayout.astro";
+
+const title = "Contact | Doctor Debug";
+const description =
+  "Get in touch with the Doctor Debug team — for early access, pilot questions, feedback, or press. The fastest way in is the waitlist.";
+
+// [VERIFY: replace with a real, monitored public contact address before launch
+// (e.g. hello@drdebug.dev). Left as a placeholder to avoid publishing a
+// personal inbox.]
+const contactEmail = "hello@drdebug.dev";
+---
+
+<FixLayout title={title} description={description} canonical="/contact">
+  <article class="px-5 py-12 sm:px-8 sm:py-16">
+    <div class="mx-auto max-w-3xl">
+      <h1 class="text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
+        Contact us
+      </h1>
+      <p class="mt-4 text-base leading-relaxed text-muted-foreground">
+        Doctor Debug is pre-launch, and we would genuinely like to hear from you —
+        especially if you build or run no-code AI agents on Lindy, Relay, n8n,
+        Make, or Zapier and hit confusing failures.
+      </p>
+
+      <div class="mt-8 grid gap-4 sm:grid-cols-2">
+        <div class="rounded-2xl border border-border bg-card p-6 shadow-sm">
+          <h2 class="text-lg font-semibold text-foreground">Get early access</h2>
+          <p class="mt-2 text-sm leading-relaxed text-muted-foreground">
+            The fastest way to reach us and to be first in line is the waitlist.
+          </p>
+          <a
+            href="/#waitlist"
+            class="mt-4 inline-flex h-9 items-center justify-center rounded-lg bg-primary px-4 text-sm font-medium text-primary-foreground shadow-sm transition hover:bg-primary/90"
+          >
+            Join the waitlist
+          </a>
+        </div>
+
+        <div class="rounded-2xl border border-border bg-card p-6 shadow-sm">
+          <h2 class="text-lg font-semibold text-foreground">Email us</h2>
+          <p class="mt-2 text-sm leading-relaxed text-muted-foreground">
+            Questions about the pilot, feedback, privacy requests, or press:
+          </p>
+          <a
+            href={`mailto:${contactEmail}`}
+            class="mt-4 inline-block text-sm font-medium text-primary underline-offset-2 hover:underline"
+          >
+            {contactEmail}
+          </a>
+        </div>
+      </div>
+
+      <p class="mt-8 text-sm text-muted-foreground">
+        Looking for help with a specific error? Start with the
+        <a href="/fix/" class="text-primary underline-offset-2 hover:underline">error-fix library</a>.
+      </p>
+    </div>
+  </article>
+</FixLayout>

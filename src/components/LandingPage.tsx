@@ -9,6 +9,7 @@ import {
   Building2,
 } from "lucide-react";
 import WaitlistForm from "./WaitlistForm";
+import { FAQS } from "../lib/faq";
 
 function Section({
   id,
@@ -52,6 +53,9 @@ function Header() {
           </a>
           <a href="#example" className="transition hover:text-foreground">
             Example
+          </a>
+          <a href="/fix/" className="transition hover:text-foreground">
+            Error fixes
           </a>
           <a href="#waitlist" className="transition hover:text-foreground">
             Waitlist
@@ -335,6 +339,33 @@ function SocialProof() {
   );
 }
 
+function FAQ() {
+  return (
+    <Section id="faq" className="bg-secondary/50">
+      <div className="mx-auto max-w-2xl text-center">
+        <h2 className="text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
+          Frequently asked questions
+        </h2>
+      </div>
+      <div className="mx-auto mt-12 max-w-3xl divide-y divide-border rounded-2xl border border-border bg-card">
+        {FAQS.map((f) => (
+          <div key={f.q} className="p-6 sm:p-7">
+            <h3 className="text-base font-semibold text-foreground">{f.q}</h3>
+            <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{f.a}</p>
+          </div>
+        ))}
+      </div>
+      <p className="mx-auto mt-8 max-w-3xl text-center text-sm text-muted-foreground">
+        Hit a specific error?{" "}
+        <a href="/fix/" className="font-medium text-primary underline-offset-2 hover:underline">
+          Browse the plain-English error-fix library
+        </a>{" "}
+        for Lindy, n8n, and more.
+      </p>
+    </Section>
+  );
+}
+
 function FinalCTA() {
   return (
     <Section id="waitlist">
@@ -359,10 +390,13 @@ function Footer() {
       <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-3 px-5 py-8 text-sm text-muted-foreground sm:flex-row sm:px-8">
         <p>Doctor Debug — plain-English fixes for broken AI agents.</p>
         <div className="flex items-center gap-5">
-          <a href="#" className="transition hover:text-foreground">
+          <a href="/fix/" className="transition hover:text-foreground">
+            Error fixes
+          </a>
+          <a href="/privacy" className="transition hover:text-foreground">
             Privacy
           </a>
-          <a href="#" className="transition hover:text-foreground">
+          <a href="/contact" className="transition hover:text-foreground">
             Contact
           </a>
         </div>
@@ -382,6 +416,7 @@ export default function LandingPage() {
         <HowItWorks />
         <UseCases />
         <SocialProof />
+        <FAQ />
         <FinalCTA />
       </main>
       <Footer />
