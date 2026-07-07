@@ -393,10 +393,10 @@ function Footer() {
           <a href="/fix/" className="transition hover:text-foreground">
             Error fixes
           </a>
-          <a href="/privacy" className="transition hover:text-foreground">
+          <a href="/privacy/" className="transition hover:text-foreground">
             Privacy
           </a>
-          <a href="/contact" className="transition hover:text-foreground">
+          <a href="/contact/" className="transition hover:text-foreground">
             Contact
           </a>
         </div>
