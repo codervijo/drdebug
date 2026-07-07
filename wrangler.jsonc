@@ -4,6 +4,10 @@
   "compatibility_date": "2026-05-28",
   "assets": {
     "directory": "./dist",
-    "not_found_handling": "single-page-application"
+    // Astro prerenders every route to its own static HTML file (the homepage's
+    // React island is an interactive component, not a client-side router), so
+    // there is no SPA fallback to preserve. "404-page" serves /404.html with a
+    // genuine HTTP 404 for unmatched paths instead of a 200 homepage soft-404.
+    "not_found_handling": "404-page"
   }
 }

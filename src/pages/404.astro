@@ -1,0 +1,46 @@
+---
+// src/pages/404.astro — real 404 page.
+// Cloudflare's wrangler.jsonc uses not_found_handling: "404-page", so unknown
+// paths serve this file (built to /404.html) with a genuine HTTP 404 status
+// instead of the homepage soft-404 (200) the SPA catch-all used to return.
+import Layout from "../layouts/Layout.astro";
+import SeoHead from "../components/SeoHead.astro";
+
+const title = "Page not found — Doctor Debug";
+const description = "That page doesn't exist. Head back to Doctor Debug or browse the error-fix library.";
+---
+
+<Layout>
+  <SeoHead
+    slot="head"
+    title={title}
+    description={description}
+    canonical="/404"
+    noindex={true}
+  />
+
+  <main class="flex min-h-screen flex-col items-center justify-center bg-background px-6 py-20 text-center">
+    <p class="font-mono text-sm font-semibold uppercase tracking-widest text-primary">Error 404</p>
+    <h1 class="mt-4 text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
+      This page didn't survive the handoff
+    </h1>
+    <p class="mt-4 max-w-md text-base leading-relaxed text-muted-foreground">
+      The page you're looking for doesn't exist or has moved. No stack trace required —
+      just pick a working path below.
+    </p>
+    <div class="mt-8 flex flex-wrap items-center justify-center gap-3">
+      <a
+        href="/"
+        class="rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground transition hover:opacity-90"
+      >
+        Back to home
+      </a>
+      <a
+        href="/fix/"
+        class="rounded-full border border-border px-5 py-2.5 text-sm font-semibold text-foreground transition hover:border-primary/40"
+      >
+        Browse the error-fix library
+      </a>
+    </div>
+  </main>
+</Layout>

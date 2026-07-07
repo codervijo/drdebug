@@ -66,3 +66,19 @@ to surface "last AI prompt" per project. Keep entries append-only.
 > (https://drdebug.dev/sitemap-index.xml) to the already-verified
 > sc-domain:drdebug.dev GSC property via `portfolio settings gsc submit-sitemap
 > --force`, and marked the GSC post-deploy todo done in lamill.toml.
+
+## 2026-07-06 — diagnose "missing" /fix/ pages + kill soft-404
+
+> Reported /fix/ pages as missing (soft-404 to homepage at 200) and asked to
+> build flat cross-platform hubs (/fix/connection-expired/ etc.) with per-page
+> SEO, a real 404, and sitemap/schema hygiene. Diagnosis: the pages were never
+> missing — they exist live under the platform-nested model /fix/[platform]/[slug]/
+> (e.g. /fix/n8n/webhook-not-registered/); the tested flat slugs never existed and
+> fell through the Cloudflare SPA catch-all. Per operator decision, kept the
+> existing verify-gated model (no invented flat hubs) and fixed the real bugs:
+> switched wrangler not_found_handling "single-page-application" → "404-page",
+> added src/pages/404.astro (noindex), and replaced the invalid Organization
+> sameAs "[VERIFY…]" placeholder with https://github.com/codervijo. Existing fix
+> pages already own their canonical/title/JSON-LD via SeoHead. Build clean, 10
+> tests pass. Flagged a pre-existing test-infra gap (jsdom used by vitest.config
+> but undeclared in package.json).
