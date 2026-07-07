@@ -46,8 +46,7 @@ priority = "medium"
 task = "Relay: capture verbatim error strings from a live relay.app workspace (no public corpus found) and replace relay-placeholder.json"
 
 [[todo]]
-status = "open"
-priority = "medium"
+status = "done"
 task = "GSC post-deploy: verify sc-domain:drdebug.dev and submit https://drdebug.dev/sitemap-index.xml"
 
 [[todo]]

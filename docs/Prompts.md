@@ -59,3 +59,10 @@ to surface "last AI prompt" per project. Keep entries append-only.
 > trimmed to 140 chars; sitemap filter excluding noindex drafts. Reconciled the
 > requested /fixes/ content layer with the existing /fix/ library (kept it as-is
 > per operator — no new invented pages, respecting the verify-before-index gate).
+
+## 2026-07-06 — GSC sitemap submit + close todo
+
+> Verified the deploy live, force-resubmitted the updated sitemap
+> (https://drdebug.dev/sitemap-index.xml) to the already-verified
+> sc-domain:drdebug.dev GSC property via `portfolio settings gsc submit-sitemap
+> --force`, and marked the GSC post-deploy todo done in lamill.toml.
