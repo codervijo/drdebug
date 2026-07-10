@@ -59,6 +59,11 @@ status = "open"
 priority = "low"
 task = "Capture real Lindy UI screenshots for the 3 verified /fix/lindy/ pages (input-too-long, insufficient-credits, trouble-completing-task); drop into public/screenshots/ as lindy-<slug>-step-<n>.png and set each fixSteps[].screenshot. Backfill/polish — decoupled from launch, pages ship text-only."
 
+[[todo]]
+status = "open"
+priority = "high"
+task = "Full SEO analysis + keyword research: identify the high-intent 'moment-of-breakage' queries operators actually search (per-platform error strings, 'lindy/n8n/relay <error> fix', 'why did my AI agent stop'), map to existing/future /fix/ pages, and prioritize which error entries to write next by search volume × intent. Feeds the pSEO library roadmap."
+
 [content]
 # Declarative content identity for this site.
 # Authored by the human; consumed by rankmill to generate drafts and run audits.
