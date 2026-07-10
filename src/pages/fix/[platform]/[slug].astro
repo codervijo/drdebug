@@ -182,11 +182,15 @@ const jsonLd = isDraft
                         loading="lazy"
                         class="mt-3 w-full rounded-xl border border-border shadow-sm"
                       />
-                    ) : (
+                    ) : isDraft ? (
+                      // Authoring hint — shown only on unverified drafts so the
+                      // content-filler knows the naming convention. Steps are
+                      // text-first; screenshots are optional polish, so verified
+                      // pages render the instruction cleanly with no placeholder.
                       <div class="mt-3 flex h-40 items-center justify-center rounded-xl border border-dashed border-border bg-muted/40 text-xs text-muted-foreground">
                         Screenshot slot — drop /screenshots/{d.platform}-{d.slug}-step-{s.step}.png
                       </div>
-                    )}
+                    ) : null}
                   </div>
                 </li>
               ))}

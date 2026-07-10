@@ -54,6 +54,11 @@ status = "open"
 priority = "low"
 task = "Decide whether to commit pnpm-lock.yaml (AI_AGENTS.md says it should be the one tracked lockfile; currently untracked)"
 
+[[todo]]
+status = "open"
+priority = "low"
+task = "Capture real Lindy UI screenshots for the 3 verified /fix/lindy/ pages (input-too-long, insufficient-credits, trouble-completing-task); drop into public/screenshots/ as lindy-<slug>-step-<n>.png and set each fixSteps[].screenshot. Backfill/polish — decoupled from launch, pages ship text-only."
+
 [content]
 # Declarative content identity for this site.
 # Authored by the human; consumed by rankmill to generate drafts and run audits.

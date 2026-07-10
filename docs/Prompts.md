@@ -82,3 +82,13 @@ to surface "last AI prompt" per project. Keep entries append-only.
 > pages already own their canonical/title/JSON-LD via SeoHead. Build clean, 10
 > tests pass. Flagged a pre-existing test-infra gap (jsdom used by vitest.config
 > but undeclared in package.json).
+
+## 2026-07-09 — decouple screenshots from /fix/ pages (ship text-only)
+
+> Can't get authentic Lindy screenshots (no login/session; won't fabricate UI),
+> so decoupled them: the [slug].astro "Screenshot slot — drop …" placeholder was
+> leaking on the live, verified, indexed Lindy pages. Changed it to render only
+> on unverified drafts (authoring hint) and nothing on verified pages, so live
+> fix pages ship as clean text-only steps. Screenshots are now optional draft-time
+> polish, not a visitor-facing dependency. Logged a low-priority lamill todo to
+> backfill real Lindy screenshots opportunistically.
