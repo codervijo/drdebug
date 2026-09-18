@@ -36,7 +36,7 @@ status = "done"
 task = "Verify Lindy drafts (x3, medium confidence) against the live platform — confirm exact UI strings, then set verified=true + lastVerified"
 
 [[todo]]
-status = "open"
+status = "done"
 priority = "medium"
 task = "Verify n8n drafts (x3) against live n8n — spot-check exact wording across versions, then set verified=true + lastVerified"
 

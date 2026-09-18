@@ -1,7 +1,7 @@
 ---
 project: drdebug.dev
 prd_version: 1
-project_version: v1.E
+project_version: v1.F
 status: planned
 owner: Vijo
 last_updated: 2026-09-17
@@ -48,7 +48,7 @@ Two-level versioning convention (canonical: `sites/portfolio/AI_AGENTS.md`):
 | **v1.C** | Lindy verified | 3 Lindy drafts verified live → indexed | ✅ |
 | **v1.D** | on-page SEO hardening | OG image, JSON-LD + visible FAQ, `/privacy` + `/contact`, sitemap excludes drafts, real 404, canonical fixes, IndexNow key, text-only fix pages | ✅ |
 | **v1.E** | keyword research | map moment-of-breakage queries to `/fix/` pages; prioritize next entries by volume × intent — see `docs/keyword-research.md` (proxy data; Ahrefs re-run pending) | ✅ |
-| **v1.F** | n8n verified | verify 3 n8n drafts against live n8n → indexed | planned |
+| **v1.F** | n8n verified | 3 n8n drafts verified against n8n 2.39.7 (live container) + source → indexed; wording corrected (Publish, current hints, no `(404)` suffix) | ✅ |
 | **v1.G** | Relay content | Relay.app shut down (free 2026-08-15, paid 2026-09-14): shutdown news on `/fix/relay/` ✅; verbatim error strings uncapturable now — placeholder stays | 🚧 |
 
 ## 6. Open questions

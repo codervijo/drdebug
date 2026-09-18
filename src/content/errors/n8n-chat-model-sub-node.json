@@ -13,26 +13,32 @@
       "title": "A Chat Model is connected but disabled",
       "explanation": "The model sub-node exists but was deactivated (greyed out), so the agent still sees no usable model.",
       "frequency": "sometimes"
-    },
-    {
-      "title": "Broken/lost connection after copy-paste or import",
-      "explanation": "Copying nodes between workflows or importing JSON can drop the sub-node link. Frequency is an estimate.",
-      "frequency": "sometimes"
     }
   ],
   "fixSteps": [
-    { "step": 1, "instruction": "On the AI Agent node, look at the connectors along the bottom and click the '+' under 'Chat Model'." },
-    { "step": 2, "instruction": "Pick a chat model provider (e.g. OpenAI Chat Model, Anthropic Chat Model) and select it." },
-    { "step": 3, "instruction": "Open that chat-model sub-node, add/select valid credentials for the provider, and choose a model (e.g. gpt-4o-mini)." },
-    { "step": 4, "instruction": "Make sure the chat-model sub-node is enabled (not greyed-out). If it's disabled, right-click it and Activate it." },
-    { "step": 5, "instruction": "If the connection still won't register after an import or copy-paste, select all the nodes, copy them into a brand-new workflow, and reconnect the chat model there." }
+    {
+      "step": 1,
+      "instruction": "With the AI Agent node open, click the '+ Chat Model' button at the bottom of the screen. With the node closed, click the 'Chat Model' + connector underneath it."
+    },
+    {
+      "step": 2,
+      "instruction": "Pick a chat model provider (e.g. OpenAI Chat Model, Anthropic Chat Model) from the list n8n shows."
+    },
+    {
+      "step": 3,
+      "instruction": "Open that chat-model sub-node, add or select valid credentials for the provider, and choose a model."
+    },
+    {
+      "step": 4,
+      "instruction": "Make sure the chat-model sub-node is enabled (not greyed out). If it's deactivated, right-click it and choose 'Activate'."
+    }
   ],
-  "whyItHappens": "n8n's AI Agent is a 'root node' in a cluster: it orchestrates but delegates the actual text generation to a connected Chat Model sub-node. Without a connected, enabled model, the agent has no inference engine to call, so n8n blocks execution before any API request is made. Connections can be silently lost during JSON import or cross-workflow copy.",
+  "whyItHappens": "n8n's AI Agent is a 'root node' in a cluster: it orchestrates but delegates the actual text generation to a connected Chat Model sub-node. Before running, n8n checks that at least one enabled node is connected to the agent's required Chat Model input; deactivated sub-nodes don't count. If none is found, it stops with this error before any API request is made.",
   "relatedErrors": [],
-  "verified": false,
-  "confidence": "high",
-  "verificationNote": "Confirm the exact button label ('+ Chat Model' vs the connector tooltip) in the operator's n8n version, and that the model providers shown match what their instance has installed.",
+  "verified": true,
   "sources": [
-    "https://docs.n8n.io/integrations/builtin/cluster-nodes/root-nodes/n8n-nodes-langchain.agent/common-issues/"
-  ]
+    "https://docs.n8n.io/integrations/builtin/cluster-nodes/root-nodes/n8n-nodes-langchain.agent/common-issues/",
+    "https://github.com/n8n-io/n8n/blob/master/packages/core/src/execution-engine/node-execution-context/utils/get-input-connection-data.ts"
+  ],
+  "lastVerified": "2026-09-17"
 }

@@ -110,3 +110,11 @@ to surface "last AI prompt" per project. Keep entries append-only.
 > 2026-09-14). Operator: "dont drop relay - just update that it is shutting down
 > - add news" → optional `news` on PlatformMeta, rendered as a dated notice on
 > /fix/relay/ sourced to relay.app. v1.E ✅, v1.G 🚧.
+
+## 2026-09-18 — v1.F verify n8n drafts
+
+> Start v1.F. Verified the 3 n8n drafts against n8n source (2.40.0) and a live
+> local n8n 2.39.7 container (webhook 404s reproduced). Corrected before flipping
+> verified: current webhook hints, test URL omits method, Publish replaces the
+> Active toggle, wrong-method case is a different message; dropped "(404)" from
+> the 404 errorMessage; dropped the unsourced copy-paste cause on chat-model.
