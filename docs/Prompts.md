@@ -92,3 +92,11 @@ to surface "last AI prompt" per project. Keep entries append-only.
 > fix pages ship as clean text-only steps. Screenshots are now optional draft-time
 > polish, not a visitor-facing dependency. Logged a low-priority lamill todo to
 > backfill real Lindy screenshots opportunistically.
+
+## 2026-09-17 — backfill PRD phases table (v0.A–v1.G)
+
+> Feature table showed only the bootstrap scaffold + a `<fill in>` v1.A. Backfilled
+> docs/prd.md from git history: v1.A landing page, v1.B /fix/ library + verified
+> gate, v1.C Lindy verified, v1.D on-page SEO hardening (all done); v1.E keyword
+> research, v1.F n8n verify, v1.G Relay strings (planned, from lamill.toml todos).
+> Filled the v1 Versions row; project_version → v1.D.

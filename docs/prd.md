@@ -1,10 +1,10 @@
 ---
 project: drdebug.dev
 prd_version: 1
-project_version: v0.A
+project_version: v1.D
 status: planned
 owner: Vijo
-last_updated: 2026-05-28
+last_updated: 2026-09-17
 ---
 
 # drdebug.dev — PRD
@@ -36,14 +36,20 @@ Two-level versioning convention (canonical: `sites/portfolio/AI_AGENTS.md`):
 | Version | Theme | Acceptance |
 |---|---|---|
 | v0 | scaffold | local builds, CF wrangler.jsonc + public/_headers in place, repo initialized |
-| v1 | <fill in: first real shipped capability> | <fill in: what users get> |
+| v1 | landing page + `/fix/` error-fix library | waitlist capture live; verified `/fix/` pages indexed, drafts `noindex` |
 
 ## 5. Phases
 
 | Phase | Theme | Features | Status |
 |---|---|---|---|
 | **v0.A** | scaffolded | `portfolio new bootstrap` ran; standard files written; git initialized | ✅ |
-| **v1.A** | <fill in> | <fill in> | planned |
+| **v1.A** | landing page | tanstack-start → Astro port; one-screen pitch + waitlist form | ✅ |
+| **v1.B** | `/fix/` library | typed `errors` collection, `/fix/[platform]/[slug]/` routes, `verified` gate (`noindex` + draft banner), sourced Lindy/n8n drafts | ✅ |
+| **v1.C** | Lindy verified | 3 Lindy drafts verified live → indexed | ✅ |
+| **v1.D** | on-page SEO hardening | OG image, JSON-LD + visible FAQ, `/privacy` + `/contact`, sitemap excludes drafts, real 404, canonical fixes, IndexNow key, text-only fix pages | ✅ |
+| **v1.E** | keyword research | map moment-of-breakage queries to `/fix/` pages; prioritize next entries by volume × intent | planned |
+| **v1.F** | n8n verified | verify 3 n8n drafts against live n8n → indexed | planned |
+| **v1.G** | Relay content | capture verbatim Relay error strings; replace `relay-placeholder.json` | planned |
 
 ## 6. Open questions
 
