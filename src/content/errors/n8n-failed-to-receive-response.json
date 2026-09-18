@@ -1,0 +1,106 @@
+{
+  "platform": "n8n",
+  "errorMessage": "Error: Failed to receive response",
+  "slug": "failed-to-receive-response",
+  "plainLanguageMeaning": "The chat window sent your message to n8n but never got a usable reply back, usually because it can't reach n8n's address or the connection was cut.",
+  "causes": [
+    {
+      "title": "n8n's public address is set wrong (self-hosted)",
+      "explanation": "The chat box in your browser sends each message to an address that n8n builds from its own settings. If n8n thinks its address is 'localhost', '0.0.0.0', an internal Docker address, or plain http when you actually use https, the browser can't reach it. The message never arrives, no execution shows up, and no node changes color. This was the confirmed fix in 6 of the 13 forum threads we read, and the suggested cause in most of the rest.",
+      "frequency": "common"
+    },
+    {
+      "title": "Updated settings never took effect",
+      "explanation": "People often change the address settings but the running n8n container keeps its old ones. In one confirmed case, only starting the containers again from the command line fixed it. In another thread, a helper pointed out that a plain Docker Compose restart reuses the old settings.",
+      "frequency": "sometimes"
+    },
+    {
+      "title": "A proxy or hosting layer cut off a slow reply",
+      "explanation": "When n8n sits behind a reverse proxy (for example Nginx Proxy Manager, Home Assistant, or Cloudflare), the proxy can give up while the AI agent is still thinking and return a timeout (504) page instead of the answer. In streaming mode the chat window treats any failed reply as this error. We saw this in 1 forum thread plus the GitHub issue it led to, where the cutoff hit at about 1.5 minutes. Changing N8N_WEBHOOK_TTL didn't help there.",
+      "frequency": "sometimes"
+    },
+    {
+      "title": "Test chat inside the editor couldn't start the test run",
+      "explanation": "In the editor's chat panel, n8n starts a fresh test run before sending each message. If that step fails (for example, the editor's live connection to the server isn't up within 10 seconds, or the run can't be started), the chat shows this error. This comes from reading n8n's source code. We didn't see it confirmed as the cause in any forum thread.",
+      "frequency": "rare"
+    },
+    {
+      "title": "File upload with Streaming response mode (older versions)",
+      "explanation": "A known bug: on the public chat with both file uploads and Streaming turned on, sending a file failed with this error and no execution was logged. It was fixed in n8n 2.1.0.",
+      "frequency": "rare"
+    },
+    {
+      "title": "Your website isn't allowed to call the chat (embedded chat)",
+      "explanation": "If you embed the chat on your own website, the Chat Trigger's Allowed Origins (CORS) option decides which websites may call it. If your site isn't on that list, the browser blocks the request and the chat can't get a reply. This is based on the docs and source code. We didn't see it confirmed in a forum thread.",
+      "frequency": "rare"
+    }
+  ],
+  "fixSteps": [
+    {
+      "step": 1,
+      "instruction": "Send a test message, then open the Executions list for the workflow. If no new execution appears, the message never reached n8n. That points to an address or network problem, not your AI model or credentials."
+    },
+    {
+      "step": 2,
+      "instruction": "Open your browser's developer tools (F12), go to the Network tab, and send a chat message again. Find the failed (red) request and look at its address. If it points to localhost, 0.0.0.0, an internal IP, or http instead of https, that's the problem."
+    },
+    {
+      "step": 3,
+      "instruction": "Self-hosted: set n8n's address settings to the exact address you type into your browser to open n8n. That means N8N_HOST (the host name or IP), N8N_PROTOCOL (http or https), N8N_EDITOR_BASE_URL, and N8N_WEBHOOK_URL (called WEBHOOK_URL before n8n 2.35.0). Don't use localhost or 0.0.0.0 if you chat from a different machine."
+    },
+    {
+      "step": 4,
+      "instruction": "Make sure the new settings actually load. With Docker Compose, recreate the container (for example `docker compose up -d --force-recreate`) instead of just restarting it. Then try the chat again."
+    },
+    {
+      "step": 5,
+      "instruction": "If n8n is behind a reverse proxy, follow n8n's reverse-proxy guide. Set N8N_WEBHOOK_URL to your public https address, set N8N_PROXY_HOPS=1, and have the proxy pass the X-Forwarded-For, X-Forwarded-Host and X-Forwarded-Proto headers."
+    },
+    {
+      "step": 6,
+      "instruction": "If the error only shows up after a long wait, or the Network tab shows a 504 Gateway Time-out page, something in front of n8n (a proxy or hosting layer) gave up waiting for the reply. Test with a shorter, faster workflow to confirm."
+    },
+    {
+      "step": 7,
+      "instruction": "Embedded chat on your own website: open the Chat Trigger node's options and make sure Allowed Origins (CORS) is '*' or includes your website's address."
+    },
+    {
+      "step": 8,
+      "instruction": "If it fails only when you attach a file and the Chat Trigger's response mode is Streaming, update n8n to 2.1.0 or later."
+    },
+    {
+      "step": 9,
+      "instruction": "If an execution does appear, open it and look for a node that turned red. That node's own error tells you what actually failed."
+    }
+  ],
+  "whyItHappens": "This message comes from n8n's chat window itself, not from your workflow. The same chat window is used in the editor's test chat, the hosted chat page, and the embeddable chat widget. Each time you send a message, it calls the Chat Trigger's web address. If that call fails outright (the address can't be reached, the browser blocks it, or the connection drops), the chat window can't tell you why, so it shows 'Error: Failed to receive response'. In Streaming mode, any error reply (such as a proxy's 504 timeout page) also produces this message. Because the problem is usually the connection between your browser and n8n, the workflow often never runs: forum posters report that no node turns red and no execution is logged. The same workflow works fine when started with a manual trigger.",
+  "relatedErrors": [
+    "chat-model-sub-node-must-be-connected"
+  ],
+  "verified": true,
+  "sources": [
+    "https://github.com/n8n-io/n8n/blob/master/packages/frontend/@n8n/chat/src/plugins/chat.ts",
+    "https://github.com/n8n-io/n8n/blob/master/packages/frontend/@n8n/chat/src/api/message.ts",
+    "https://github.com/n8n-io/n8n/blob/master/packages/frontend/@n8n/chat/src/api/generic.ts",
+    "https://github.com/n8n-io/n8n/blob/master/packages/frontend/editor-ui/src/features/execution/logs/composables/useChatState.ts",
+    "https://github.com/n8n-io/n8n/blob/master/packages/frontend/editor-ui/src/features/execution/logs/components/ChatMessagesPanel.vue",
+    "https://github.com/n8n-io/n8n/blob/master/packages/@n8n/nodes-langchain/nodes/trigger/ChatTrigger/ChatTrigger.node.ts",
+    "https://github.com/n8n-io/n8n/blob/master/packages/@n8n/nodes-langchain/nodes/trigger/ChatTrigger/templates.ts",
+    "https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-langchain.chattrigger/",
+    "https://docs.n8n.io/hosting/configuration/configuration-examples/webhook-url/",
+    "https://docs.n8n.io/hosting/configuration/environment-variables/deployment/",
+    "https://community.n8n.io/t/298630",
+    "https://community.n8n.io/t/299275",
+    "https://community.n8n.io/t/300744",
+    "https://community.n8n.io/t/288123",
+    "https://community.n8n.io/t/298596",
+    "https://community.n8n.io/t/256758",
+    "https://community.n8n.io/t/303990",
+    "https://community.n8n.io/t/306365",
+    "https://community.n8n.io/t/167382",
+    "https://community.n8n.io/t/272919",
+    "https://github.com/n8n-io/n8n/issues/26971",
+    "https://github.com/n8n-io/n8n/issues/22934"
+  ],
+  "lastVerified": "2026-09-18"
+}

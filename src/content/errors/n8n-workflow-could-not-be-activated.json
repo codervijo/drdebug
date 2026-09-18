@@ -1,0 +1,124 @@
+{
+  "platform": "n8n",
+  "errorMessage": "Workflow could not be activated",
+  "slug": "workflow-could-not-be-activated",
+  "plainLanguageMeaning": "n8n tried to switch your workflow on, but its starting step (the trigger) couldn't connect to the service it listens to, so it isn't running.",
+  "causes": [
+    {
+      "title": "Another workflow already uses the same webhook address (often from a copied trigger)",
+      "explanation": "Each webhook address (path plus method) can belong to only one live workflow. Copying a workflow or a trigger node copies its address too, so the copy clashes with the original. Older forum reports show this as 'There is already an entry with this name' or 'Unknown error'; in current n8n a pop-up titled 'Conflicting Webhook Path' names the other workflow. Seen in 5 of the ~30 forum threads read.",
+      "frequency": "common"
+    },
+    {
+      "title": "The trigger's connection to the outside service is missing, wrong, or lacks permission",
+      "explanation": "Clicking 'Execute' only listens; publishing/activating actually signs your trigger up with the outside service (Zendesk, Airtable, Google Sheets, etc.). If the trigger lost its saved credential, points to a credential that doesn't exist (common after duplicating a workflow), refers to a base/table/view you deleted, or your account lacks access (one confirmed case: a Google Sheet in a Shared Drive needed 'Manager' access), the service refuses and activation fails. Seen in 6 of the ~30 threads read.",
+      "frequency": "common"
+    },
+    {
+      "title": "More than one Telegram trigger on the same bot",
+      "explanation": "Telegram allows only one webhook per bot. A second Telegram Trigger for the same bot (in this or another workflow) makes activation fail, reported as 'Too Many Requests: retry after 1'. Seen in 2 threads, both solved by keeping one trigger per bot.",
+      "frequency": "sometimes"
+    },
+    {
+      "title": "Schedule Trigger or timezone glitch",
+      "explanation": "Several users hit 'Unknown alias: obj' and fixed it by re-selecting the Schedule Trigger's values (or removing pinned data from it). Another saw an 'invalid timezone' error fixed by setting a proper timezone name such as Europe/London in the workflow settings. Seen in 2 threads.",
+      "frequency": "sometimes"
+    },
+    {
+      "title": "n8n Cloud: plan's active-workflow limit reached",
+      "explanation": "Two n8n Cloud threads showed 'External hook \"workflow.activate\" failed'; helpers and an n8n team member attributed it to the plan's limit on active workflows. One user fixed it by switching another workflow off, then logging out and back in after upgrading.",
+      "frequency": "sometimes"
+    },
+    {
+      "title": "Self-hosted: outside services can't reach your n8n",
+      "explanation": "Services like Telegram, WhatsApp or Box must call your n8n's public web address. If n8n is behind a proxy without its public webhook address set, uses 'localhost', or uses the development tunnel, activation can fail (e.g. 'bad webhook: Failed to resolve host'). Seen in 3 threads; the suggested fixes there were not all confirmed by the poster.",
+      "frequency": "sometimes"
+    },
+    {
+      "title": "Self-hosted n8n 2.x: a node is switched off, or main and worker versions differ",
+      "explanation": "n8n 2.0 disables the Execute Command and Local File Trigger nodes by default, so publishing fails with 'Unrecognized node type'. Separately, one thread's publish errors ('User is missing a scope required to perform this action') were fixed by running the same n8n version on the main instance and the workers. Seen in 2 threads.",
+      "frequency": "rare"
+    }
+  ],
+  "fixSteps": [
+    {
+      "step": 1,
+      "instruction": "Read the whole error pop-up. Under the title it usually says Error in node \"<name>\": followed by the real reason. That node — almost always your trigger — is where to look."
+    },
+    {
+      "step": 2,
+      "instruction": "Open that node and check the credential field. If it's empty or shows a credential that no longer exists (common after duplicating a workflow), pick or reconnect the right account and save."
+    },
+    {
+      "step": 3,
+      "instruction": "If the trigger is a Webhook, Form or Chat trigger, or you copied the workflow: change the node's Path to something new, or unpublish the other workflow that uses it. If that doesn't work, delete the trigger node and add a fresh one instead of a copy."
+    },
+    {
+      "step": 4,
+      "instruction": "In the outside service, confirm everything the trigger points to still exists (base, table, view, sheet) and your account has enough access. For a Google Sheet in a Shared Drive, one user needed 'Manager' access to the Drive."
+    },
+    {
+      "step": 5,
+      "instruction": "Telegram: keep only one Telegram Trigger per bot across all live workflows. Use a second bot for testing if you need two."
+    },
+    {
+      "step": 6,
+      "instruction": "Schedule Trigger: open it, re-select its interval values (and remove any pinned data), then save. If the error mentions timezone, open workflow settings and choose a named timezone like Europe/London."
+    },
+    {
+      "step": 7,
+      "instruction": "n8n Cloud: check how many workflows are live versus your plan's limit; switch one off and try again. After an upgrade, log out, log back in and hard-refresh the page."
+    },
+    {
+      "step": 8,
+      "instruction": "Self-hosted: make sure your n8n has a public HTTPS address and your admin set N8N_WEBHOOK_URL (WEBHOOK_URL before 2.35) to it — not localhost or a dev tunnel. On 2.x, ask your admin to enable blocked nodes via NODES_EXCLUDE and run the same n8n version on main and workers."
+    },
+    {
+      "step": 9,
+      "instruction": "Still stuck on n8n Cloud with nothing wrong in your workflow? Try again after a short wait (some reports cleared on their own) and contact n8n support with the full error text."
+    }
+  ],
+  "whyItHappens": "When you switch a workflow on — called 'Activate' in n8n 1.x and 'Publish' in n8n 2.x — n8n registers every trigger with the outside world: it saves webhook addresses, subscribes to services like Telegram or Airtable, and starts schedules. If any trigger fails, n8n stops, turns the workflow back off, and shows 'Workflow could not be published' (2.x, when you click Publish) or 'Workflow could not be activated' (1.x Active toggle, and in 2.x when an already-published workflow's trigger fails to start), both from the same 'Workflow could not be {state}' message. It adds 'Error in node \"<name>\":' plus the service's own error. Test runs don't register anything, which is why a workflow can run fine manually yet fail here. Frequencies are a judgement from about 30 n8n forum threads read, not measured data.",
+  "relatedErrors": [
+    "webhook-not-registered",
+    "too-many-requests",
+    "bad-request-check-your-parameters",
+    "authorization-failed-check-your-credentials"
+  ],
+  "verified": true,
+  "sources": [
+    "https://github.com/n8n-io/n8n/blob/master/packages/frontend/@n8n/i18n/src/locales/en.json",
+    "https://github.com/n8n-io/n8n/blob/master/packages/frontend/editor-ui/src/app/composables/useWorkflowActivate.ts",
+    "https://github.com/n8n-io/n8n/blob/master/packages/frontend/editor-ui/src/app/composables/usePushConnection/handlers/workflowFailedToActivate.ts",
+    "https://github.com/n8n-io/n8n/blob/master/packages/frontend/editor-ui/src/app/composables/useActivationError.ts",
+    "https://github.com/n8n-io/n8n/blob/master/packages/cli/src/active-workflow-manager.ts",
+    "https://github.com/n8n-io/n8n/blob/master/packages/core/src/execution-engine/active-workflow-triggers.ts",
+    "https://github.com/n8n-io/n8n/blob/master/packages/frontend/editor-ui/src/features/workflows/components/WorkflowActivationConflictingWebhookModal.vue",
+    "https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.webhook/common-issues/",
+    "https://docs.n8n.io/integrations/builtin/trigger-nodes/n8n-nodes-base.telegramtrigger/common-issues/",
+    "https://docs.n8n.io/hosting/configuration/configuration-examples/webhook-url/",
+    "https://docs.n8n.io/2-0-breaking-changes/",
+    "https://community.n8n.io/t/workflow-could-not-be-activated/19621",
+    "https://community.n8n.io/t/23322",
+    "https://community.n8n.io/t/11008",
+    "https://community.n8n.io/t/20623",
+    "https://community.n8n.io/t/63506",
+    "https://community.n8n.io/t/270419",
+    "https://community.n8n.io/t/185406",
+    "https://community.n8n.io/t/49834",
+    "https://community.n8n.io/t/165968",
+    "https://community.n8n.io/t/65593",
+    "https://community.n8n.io/t/275282",
+    "https://community.n8n.io/t/131158",
+    "https://community.n8n.io/t/98762",
+    "https://community.n8n.io/t/81029",
+    "https://community.n8n.io/t/89276",
+    "https://community.n8n.io/t/108022",
+    "https://community.n8n.io/t/95146",
+    "https://community.n8n.io/t/264640",
+    "https://community.n8n.io/t/246419",
+    "https://community.n8n.io/t/248302",
+    "https://community.n8n.io/t/61682"
+  ],
+  "lastVerified": "2026-09-18"
+}

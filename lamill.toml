@@ -1,5 +1,10 @@
 # lamill.toml — per-site config consumed by lamill (portfolio/ops) and rankmill (content/audits).
-# [content] = stable identity, authored by hand. [todo] = volatile work state.
+# [[todo]]
+status = "done"
+priority = "medium"
+task = "v1.H: verify 5 n8n batch-2 drafts (bad-request, authorization-failed, too-many-requests, failed-to-receive-response, workflow-could-not-be-activated). 400/401/429 messages confirmed live on n8n 2.39.7; causes are forum-sourced — review each verificationNote, then flip verified=true + lastVerified."
+
+[content] = stable identity, authored by hand. [todo] = volatile work state.
 # rankmill output lives in sites/<domain>/rankmill-output/, not here.
 
 schema = "lamill-toml-v1"

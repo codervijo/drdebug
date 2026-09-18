@@ -1,0 +1,109 @@
+{
+  "platform": "n8n",
+  "errorMessage": "Authorization failed - please check your credentials",
+  "slug": "authorization-failed-check-your-credentials",
+  "plainLanguageMeaning": "The app your workflow talks to rejected the login n8n sent. The key or account is missing, typed wrong, expired, or not allowed to do this.",
+  "causes": [
+    {
+      "title": "The key is sent in the wrong format (or not sent at all)",
+      "explanation": "The service expects the key in a specific shape — for example a word like \"Bearer\", \"Token\" or \"Key\" in front of it, under a specific header name. If the prefix is missing, the header name is wrong, or the HTTP Request node's authentication is left on None, the service sees no valid login. This was the most frequently solved cause in the forum threads read (fal.ai, Baserow, ManyChat and a generic API key case).",
+      "frequency": "common"
+    },
+    {
+      "title": "The token expired or was revoked",
+      "explanation": "Workflows that ran fine start failing later. Forum examples: WhatsApp temporary access tokens from Meta's API setup page expire after hours, Google connections stopped working until reconnected, and QuickBooks and ClickUp users reported connections dropping after a run. Several of these threads had no confirmed fix, so the pattern is well reported but the cure varies by service.",
+      "frequency": "common"
+    },
+    {
+      "title": "The login works, but that account isn't allowed to do this action",
+      "explanation": "The service knows who you are but the user or app behind the credential lacks permission for this operation. Two WordPress threads showed this: the service said the user was not allowed to create posts.",
+      "frequency": "sometimes"
+    },
+    {
+      "title": "The key came from the wrong place",
+      "explanation": "Some services have more than one kind of key. Confirmed forum cases: a Gemini key made in Vertex AI Studio instead of Google AI Studio, and a WhatsApp token generated on the API setup page instead of a system user's token.",
+      "frequency": "sometimes"
+    },
+    {
+      "title": "A needed credential field is left empty",
+      "explanation": "Some nodes need an extra field that isn't obvious. In one solved thread, the HubSpot Trigger failed with this error until the Developer API Key field was filled in, even though the account showed as connected.",
+      "frequency": "rare"
+    },
+    {
+      "title": "The service blocks n8n's location or network",
+      "explanation": "The key is correct, but the service rejects where the request comes from. Forum cases: an Infobip IP allowlist rejecting n8n Cloud, and a Notion account restricted until the n8n server was moved to a different country.",
+      "frequency": "rare"
+    },
+    {
+      "title": "A temporary glitch or an n8n bug",
+      "explanation": "Occasionally the same credentials work on a retry (a Baserow thread suspected rate limiting on Baserow's side), or an n8n release had a bug (an Asana OAuth problem fixed in n8n 0.163.1).",
+      "frequency": "rare"
+    }
+  ],
+  "fixSteps": [
+    {
+      "step": 1,
+      "instruction": "Open the failed node and read the extra detail shown under the error. It is the service's own reason — for example \"Authentication credentials were not provided\", \"Session has expired\" or \"not allowed to create posts\" — and tells you which of the causes above you have."
+    },
+    {
+      "step": 2,
+      "instruction": "If you use the HTTP Request node, check that Authentication is not set to None. Choose Generic Credential Type, then Header Auth or Bearer Auth (or Query Auth if the service wants the key in the web address), and create a credential there."
+    },
+    {
+      "step": 3,
+      "instruction": "Check the service's API documentation for the exact header name and value format, and copy it exactly — including any word in front of the key such as \"Bearer \", \"Token \" or \"Key \", and leaving it out if the docs say to send only the raw key."
+    },
+    {
+      "step": 4,
+      "instruction": "Open the credential in n8n, delete the key, and paste it again with no spaces before or after. Then log in to the service and confirm the key is still active; if in doubt, create a new key and use that."
+    },
+    {
+      "step": 5,
+      "instruction": "Make sure the key is the right kind, from the place the service's docs point to (for example Google AI Studio for a Gemini API key, or a system user's token for WhatsApp Cloud API rather than the temporary token on the setup page)."
+    },
+    {
+      "step": 6,
+      "instruction": "If it worked before and suddenly stopped, reconnect the credential (sign in again for OAuth connections). If the service offers a long-lived or non-expiring token, switch to it so this doesn't keep happening."
+    },
+    {
+      "step": 7,
+      "instruction": "If the detail says you aren't allowed to do the action, give the account or app behind the credential the missing permission inside the service itself (for example a WordPress user role that can create posts)."
+    },
+    {
+      "step": 8,
+      "instruction": "Still failing with a key you know is right? Fill in every field of the credential (some trigger nodes need an extra key), check whether the service restricts access by IP address or country, and update n8n in case it's a fixed bug. To see exactly what n8n sends, point a test HTTP Request at a request-inspector site such as webhook.site and look at the header it receives."
+    }
+  ],
+  "whyItHappens": "This message comes from the remote service, not from n8n itself. When a node's request comes back with HTTP status 401 (\"unauthorized\"), n8n replaces the raw error with this standard message; the service's own explanation appears in the error details. A 401 means the service didn't accept the login that came with the request — it was missing, malformed, expired or rejected. It is different from a 403 (\"Forbidden - perhaps check your credentials?\"), though in practice services use the two codes loosely, so a 401 can also mean \"we know who you are, but you can't do this.\" A green \"connection tested\" result on the credential does not guarantee the node will work: forum threads show the test passing while the real request still fails.",
+  "relatedErrors": [
+    "bad-request-check-your-parameters",
+    "resource-could-not-be-found-404"
+  ],
+  "verified": true,
+  "sources": [
+    "https://github.com/n8n-io/n8n/blob/master/packages/workflow/src/errors/node-api.error.ts",
+    "https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.httprequest/common-issues/",
+    "https://docs.n8n.io/integrations/builtin/credentials/httprequest/",
+    "https://docs.n8n.io/integrations/builtin/credentials/google/oauth-generic/",
+    "https://community.n8n.io/t/authorization-failed-please-check-your-credentials/79534",
+    "https://community.n8n.io/t/authorization-failed-please-check-your-credentials-item-0/109411",
+    "https://community.n8n.io/t/error-401-authorization-failed-please-check-your-credentials-wrong-format-token/101507",
+    "https://community.n8n.io/t/http-request-node-returns-401-unauthorized-invalid-api-key/310715",
+    "https://community.n8n.io/t/access-token-expired-continuously/98749",
+    "https://community.n8n.io/t/google-credentials-error-after-sometime/8084",
+    "https://community.n8n.io/t/problem-in-the-quick-books-api-integration-with-n8n-authorization-failed-please-check-your-credentials-401-fault-error-message-accessing-wrong-cluster/224126",
+    "https://community.n8n.io/t/clickup-connection-error-in-n8n-free-authorization-failed-please-check-your-credentials/232887",
+    "https://community.n8n.io/t/airtop-suddenly-throws-401-authorization-error-please-check-your-credentials/208303",
+    "https://community.n8n.io/t/401-error-message-authorization-failed-please-check-your-credentials/87856",
+    "https://community.n8n.io/t/error-authorization-failed-please-check-your-credentials/34767",
+    "https://community.n8n.io/t/gemini-api-credentials-correct-are-not-recognized/193091",
+    "https://community.n8n.io/t/error-with-hubspot-trigger-node-authorization-failed-please-check-your-credentials/24620",
+    "https://community.n8n.io/t/authorization-header-not-working-on-n8n-cloud-401-error-but-works-fine-from-curl/301693",
+    "https://community.n8n.io/t/this-users-account-is-restricted-from-accessing-the-public-api/128097",
+    "https://community.n8n.io/t/baserow-authorization-failed-please-check-your-credentials/32172",
+    "https://community.n8n.io/t/asana-node-oauth-issues-500-internal-server-error-401-not-authorized/11369",
+    "https://community.n8n.io/t/openai-node-authorization-is-not-working/300779",
+    "https://community.n8n.io/t/authorization-failed-please-check-your-credentials-missing-bearer-or-basic-authentication-in-header/267639"
+  ],
+  "lastVerified": "2026-09-18"
+}

@@ -118,3 +118,14 @@ to surface "last AI prompt" per project. Keep entries append-only.
 > verified: current webhook hints, test URL omits method, Publish replaces the
 > Active toggle, wrong-method case is a different message; dropped "(404)" from
 > the 404 errorMessage; dropped the unsourced copy-paste cause on chat-model.
+
+## 2026-09-18 — v1.H n8n batch 2 (5 entries)
+
+> "commit and start the next n8n entries" → "flip them and commit and push".
+> Added 5 n8n /fix/ pages from keyword-research ranks 1–5: bad-request (400),
+> authorization-failed (401), too-many-requests (429), failed-to-receive-response,
+> workflow-could-not-be-activated. 400/401/429 messages reproduced live on n8n
+> 2.39.7 via `n8n execute`; the other two strings confirmed in n8n source. Causes
+> and fixes researched from community.n8n.io threads, n8n docs and source by
+> parallel agents (every cause cited); UI labels checked against source; unsourced
+> fixes cut. Operator approved flipping verified=true.

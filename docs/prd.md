@@ -1,7 +1,7 @@
 ---
 project: drdebug.dev
 prd_version: 1
-project_version: v1.F
+project_version: v1.H
 status: planned
 owner: Vijo
 last_updated: 2026-09-17
@@ -50,6 +50,7 @@ Two-level versioning convention (canonical: `sites/portfolio/AI_AGENTS.md`):
 | **v1.E** | keyword research | map moment-of-breakage queries to `/fix/` pages; prioritize next entries by volume × intent — see `docs/keyword-research.md` (proxy data; Ahrefs re-run pending) | ✅ |
 | **v1.F** | n8n verified | 3 n8n drafts verified against n8n 2.39.7 (live container) + source → indexed; wording corrected (Publish, current hints, no `(404)` suffix) | ✅ |
 | **v1.G** | Relay content | Relay.app shut down (free 2026-08-15, paid 2026-09-14): shutdown news on `/fix/relay/` ✅; verbatim error strings uncapturable now — placeholder stays | 🚧 |
+| **v1.H** | n8n batch 2 | 5 entries from `docs/keyword-research.md` ranks 1–5: 400 bad request, 401 authorization failed, 429 too many requests, `Failed to receive response`, `Workflow could not be activated` — verified (400/401/429 live on n8n 2.39.7; causes forum-sourced) | ✅ |
 
 ## 6. Open questions
 

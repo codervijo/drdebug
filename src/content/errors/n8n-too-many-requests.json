@@ -1,0 +1,104 @@
+{
+  "platform": "n8n",
+  "errorMessage": "The service is receiving too many requests from you",
+  "slug": "too-many-requests",
+  "plainLanguageMeaning": "The app your workflow talks to got too many requests from you too fast, or your account hit its usage limit, so it's refusing more for now.",
+  "causes": [
+    {
+      "title": "Your workflow sends requests faster than the service allows",
+      "explanation": "Most n8n nodes make one request per item. Feed a node dozens or hundreds of rows and it fires them off back to back, which trips the service's per-minute limit. Forum examples: Google Sheets failing after 30 to 70 rows, OpenAI failing on a 1,000-row run, Telegram refusing messages after about 20 in a row. This was the most common cause in the 16 forum threads we read (7 of them).",
+      "frequency": "common"
+    },
+    {
+      "title": "Your account is out of credits or quota",
+      "explanation": "Some services answer with the same 'too many requests' code when you've used up your plan or balance, not just when you're going too fast. One OpenAI user's error read 'You exceeded your current quota, please check your plan and billing details'. Their dashboard showed budget left, but they were actually out of credits, and topping up fixed it. Another thread put it down to OpenAI's lowest usage tier having low limits. Seen in 2 of the 16 threads.",
+      "frequency": "sometimes"
+    },
+    {
+      "title": "A node runs many more times than you meant it to",
+      "explanation": "If the node before it outputs many items, a node you meant to run once (clearing a sheet, one API call) runs once per item and floods the service. Several forum users fixed this by turning on the node's 'Execute Once' setting. Seen in 3 of the 16 threads.",
+      "frequency": "sometimes"
+    },
+    {
+      "title": "Google Sheets on n8n Cloud sharing a Google quota",
+      "explanation": "Several n8n Cloud users found that the Google project number in their Sheets error wasn't one of theirs. When you sign in to Google through n8n's built-in connection without your own Google Cloud app, requests can count against a quota shared with other users, so you can hit the limit with very little traffic. A forum helper said this applies on the Starter plan. n8n hasn't confirmed this in its docs; it comes from 3 forum threads.",
+      "frequency": "sometimes"
+    },
+    {
+      "title": "Two workflows using the same Telegram bot trigger",
+      "explanation": "Publishing a workflow with a Telegram trigger can fail with this message ('Too Many Requests: retry after 1') when another active workflow already uses a trigger for the same bot. Telegram allows only one trigger per bot. Seen in 2 of the 16 threads.",
+      "frequency": "rare"
+    },
+    {
+      "title": "The service uses 429 for something other than speed",
+      "explanation": "Some services send this code for other reasons. Forum helpers reported getting it when authentication was missing or wrong, and one OpenAI image-generation case turned out to be blocked by Cloudflare before the request ever reached OpenAI. These are one-off reports (3 threads), so treat this as the last thing to check.",
+      "frequency": "rare"
+    }
+  ],
+  "fixSteps": [
+    {
+      "step": 1,
+      "instruction": "Open the failed node and read the full error details under the headline. The service's own message usually tells you which problem you have: 'rate limit' or 'per minute' means you're going too fast, while 'quota', 'plan' or 'billing' means your account has run out."
+    },
+    {
+      "step": 2,
+      "instruction": "Look up the service's rate limit in its API documentation (for example, how many requests per minute it allows). You'll use that number to decide how much to slow down."
+    },
+    {
+      "step": 3,
+      "instruction": "Quickest fix: open the node, go to Settings, and turn on Retry On Fail. Set Wait Between Tries (ms) to longer than the rate limit window. If the service allows one request per second, n8n's docs suggest 1000 (1 second)."
+    },
+    {
+      "step": 4,
+      "instruction": "If you're using the HTTP Request node, choose Add Option > Batching. Set Items per Batch to a small number and Batch Interval (ms) to add a pause between batches, keeping under the limit from step 2."
+    },
+    {
+      "step": 5,
+      "instruction": "For app nodes (Google Sheets, OpenAI, Telegram and others) that don't have a batching option: put a Loop Over Items node before the node that calls the service, add a Wait node after it, and connect the Wait node back to Loop Over Items. That processes items in small groups with a pause between each group. A 1 to 2 second wait is a common starting point on the forum, but you may need to adjust it."
+    },
+    {
+      "step": 6,
+      "instruction": "If the node should only run once (clearing a sheet, a single lookup), open its Settings and turn on Execute Once so it doesn't repeat for every incoming item."
+    },
+    {
+      "step": 7,
+      "instruction": "If the details mention quota, plan or billing, log in to the service (for example, your OpenAI billing page) and check your actual remaining credits or usage tier. Add credits or upgrade if you've run out; slowing down won't fix this one."
+    },
+    {
+      "step": 8,
+      "instruction": "Google Sheets on n8n Cloud with a Google project number you don't recognise: you may be sharing a quota. One forum user tracked their usage by making their own Google credential tied to their own Google Cloud project. They could only use it with the HTTP Request node, not the Google Sheets node, so throttling (steps 3 to 5) may still be your main fix."
+    },
+    {
+      "step": 9,
+      "instruction": "If publishing a Telegram-triggered workflow fails with this error, make sure no other active workflow uses a trigger for the same bot. Deactivate the duplicate, then publish again."
+    }
+  ],
+  "whyItHappens": "HTTP status 429 means 'Too Many Requests'. The error comes from the outside service, not from n8n. When a node gets a 429, n8n swaps the raw response for this standard message, and the service's own explanation appears in the error details. Older n8n versions worded it 'The service is receiving too many requests from you! Perhaps take a break?' The HTTP Request node also adds a hint to try the batching settings under Options. n8n doesn't slow down or pace requests unless you set it up to, so a node that processes many items can easily go over a service's limit. That's why the fixes are about pacing: retries with a wait, batching, or a loop with a Wait node.",
+  "relatedErrors": [
+    "workflow-could-not-be-activated"
+  ],
+  "verified": true,
+  "sources": [
+    "https://github.com/n8n-io/n8n/blob/master/packages/workflow/src/errors/node-api.error.ts",
+    "https://github.com/n8n-io/n8n/blob/n8n@0.150.0/packages/workflow/src/NodeErrors.ts",
+    "https://github.com/n8n-io/n8n/blob/master/packages/nodes-base/nodes/HttpRequest/V3/HttpRequestV3.node.ts",
+    "https://docs.n8n.io/integrations/builtin/rate-limits/",
+    "https://community.n8n.io/t/16954",
+    "https://community.n8n.io/t/18286",
+    "https://community.n8n.io/t/21168",
+    "https://community.n8n.io/t/32227",
+    "https://community.n8n.io/t/10010",
+    "https://community.n8n.io/t/82750",
+    "https://community.n8n.io/t/173091",
+    "https://community.n8n.io/t/92819",
+    "https://community.n8n.io/t/198481",
+    "https://community.n8n.io/t/62927",
+    "https://community.n8n.io/t/294922",
+    "https://community.n8n.io/t/135361",
+    "https://community.n8n.io/t/275282",
+    "https://community.n8n.io/t/289617",
+    "https://community.n8n.io/t/172369",
+    "https://community.n8n.io/t/259345"
+  ],
+  "lastVerified": "2026-09-18"
+}

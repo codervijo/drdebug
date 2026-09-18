@@ -1,0 +1,86 @@
+{
+  "platform": "n8n",
+  "errorMessage": "Bad request - please check your parameters",
+  "slug": "bad-request-check-your-parameters",
+  "plainLanguageMeaning": "The app your workflow is talking to rejected the request because something in it was missing, misspelled, or in a format that app doesn't accept.",
+  "causes": [
+    {
+      "title": "The data you send isn't what the service expects",
+      "explanation": "The service needs certain fields with certain names, and you sent different ones, extra ones, or left required ones out. Forum cases: a Google Chat webhook that needed its own message fields, and a WordPress media upload that got fields WordPress doesn't understand (it needed the actual file). This was the most frequent cause in the 13 forum threads we read (judgement from those threads).",
+      "frequency": "common"
+    },
+    {
+      "title": "A list or table sent in the wrong shape",
+      "explanation": "Some services want a list of items, or a list of rows, and reject a single value or a differently nested structure. Forum cases: Google Sheets Update needed each row as its own list, and an API needed its items field as a list of objects. n8n's docs also say badly formatted list values in query parameters are one of the most frequent causes in the HTTP Request node.",
+      "frequency": "common"
+    },
+    {
+      "title": "Special characters in text break the request",
+      "explanation": "Text containing formatting symbols, line breaks, or punctuation can make the request invalid. Forum cases: Telegram messages whose formatting symbols couldn't be read ('can't parse entities'), and text from an AI model whose line breaks broke the request body sent to the LINE API.",
+      "frequency": "sometimes"
+    },
+    {
+      "title": "A value filled in by an expression or AI is invalid",
+      "explanation": "An ID, date, or other value built at run time can come out in a form the service rejects. Forum case: a Google Calendar node filled in by an AI agent returned 'Invalid resource id value' until the node's fields were set up differently.",
+      "frequency": "sometimes"
+    },
+    {
+      "title": "Something outside the node changed (account, API version, or n8n setup)",
+      "explanation": "Rarely, the request itself is fine. Forum cases: every OpenAI request failed until the user added payment details to their OpenAI account; the Google Ads node failed until n8n updated it for a newer Google API version; on a self-hosted setup with a separate worker, the worker ran an older n8n version than the main instance, and live runs failed until both were updated.",
+      "frequency": "rare"
+    }
+  ],
+  "fixSteps": [
+    {
+      "step": 1,
+      "instruction": "Open the failed node and look at the error details below the headline. n8n shows the service's own explanation there (for example 'Invalid resource id value.' or 'All object keys must match'). That line usually names the exact problem."
+    },
+    {
+      "step": 2,
+      "instruction": "Open the service's API documentation for the action you're doing. Compare the field names, required fields, and allowed values against what your node sends. Add any missing required fields and remove any the service doesn't list."
+    },
+    {
+      "step": 3,
+      "instruction": "Check the shape of lists. If the docs say a field is a list, send a list. For Google Sheets updates, send each row as its own list. In the HTTP Request node, if you're sending a list in query parameters, set the 'Array Format in Query Parameters' option to the format the service's docs ask for."
+    },
+    {
+      "step": 4,
+      "instruction": "Check any values filled in by expressions or an AI agent: IDs, dates, email addresses. Look at the value the node actually received in its input, and try a known-good value typed in by hand to see if the error goes away."
+    },
+    {
+      "step": 5,
+      "instruction": "If text is involved, test with plain words first (for example 'test'). If that works, the problem is special characters. For Telegram, add the Parse Mode option and choose HTML or MarkdownV2 so formatting symbols are read correctly. For text from an AI model, clean up line breaks (for example with a Code node) before sending it."
+    },
+    {
+      "step": 6,
+      "instruction": "If one run fails and another works, remove fields one at a time until the error stops. Then you know which field or which data is the problem."
+    },
+    {
+      "step": 7,
+      "instruction": "If nothing in your workflow changed and it suddenly fails: check your account with that service (for example billing or payment details), update n8n in case the node was changed for a new API version, and if you self-host with separate workers, make sure every n8n instance runs the same version."
+    }
+  ],
+  "whyItHappens": "HTTP status 400 means the other service received your request but refused it as invalid. The refusal comes from that service, not from n8n itself. When a node gets a 400 back, n8n replaces the raw error with this standard message, and puts the service's own explanation into the error description if it can find one. That's why the headline is always vague but the details below it are often specific. The problem is almost always in what the node sent (fields, formats, or values), and the service's API documentation is the reference for what it accepts.",
+  "relatedErrors": [
+    "resource-could-not-be-found-404",
+    "authorization-failed-check-your-credentials"
+  ],
+  "verified": true,
+  "sources": [
+    "https://github.com/n8n-io/n8n/blob/master/packages/workflow/src/errors/node-api.error.ts",
+    "https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.httprequest/common-issues/",
+    "https://community.n8n.io/t/error-bad-request-please-check-your-parameters/24868",
+    "https://community.n8n.io/t/new-error-bad-request-please-check-your-parameters/28308",
+    "https://community.n8n.io/t/google-sheets-bad-request-error-when-writing-to-sheet/12804",
+    "https://community.n8n.io/t/http-request-with-array-body-parameter/24061",
+    "https://community.n8n.io/t/telegram-node-error-bad-request-cant-parse-entities/91106",
+    "https://community.n8n.io/t/http-request-the-error-message-reads-problem-in-node-http-request-bad-request-please-check-your-parameters/48867",
+    "https://community.n8n.io/t/problem-with-create-event-in-google-calendar/82962",
+    "https://community.n8n.io/t/random-problems-trying-to-create-a-row-in-supabase/17377",
+    "https://community.n8n.io/t/amazon-ses-error-on-valid-body-subject/11116",
+    "https://community.n8n.io/t/openai-return-400-error/23248",
+    "https://community.n8n.io/t/google-ads-400-bad-request-error/21709",
+    "https://community.n8n.io/t/openai-chat-model-error-bad-request-please-check-your-parameters/75255"
+  ],
+  "lastVerified": "2026-09-18"
+}
