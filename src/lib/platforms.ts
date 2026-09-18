@@ -13,6 +13,16 @@ interface PlatformMeta {
   label: string;
   /** Tailwind classes for the small platform badge (semantic tokens only). */
   badgeClass: string;
+  /** Optional dated platform news, shown as a notice on /fix/<platform>/. */
+  news?: PlatformNews;
+}
+
+interface PlatformNews {
+  /** ISO date the news item was written (YYYY-MM-DD). */
+  date: string;
+  headline: string;
+  body: string[];
+  sources: { label: string; url: string }[];
 }
 
 export const PLATFORMS: Record<Platform, PlatformMeta> = {
@@ -27,6 +37,15 @@ export const PLATFORMS: Record<Platform, PlatformMeta> = {
   relay: {
     label: "Relay",
     badgeClass: "bg-primary/10 text-primary",
+    news: {
+      date: "2026-09-17",
+      headline: "Relay.app has shut down",
+      body: [
+        "Relay.app wound down in 2026: free accounts closed on August 15, 2026 and paying customers on September 14, 2026. New signups were turned off during the wind-down.",
+        "Per Relay, customer content and product data not exported before the end of the wind-down window is permanently deleted. Relay's export covered workflows, sequences and MCP servers as JSON plus AI prompts, and run history and tables as CSV.",
+      ],
+      sources: [{ label: "Relay.app shutdown announcement", url: "https://relay.app/" }],
+    },
   },
 };
 

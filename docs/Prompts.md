@@ -100,3 +100,13 @@ to surface "last AI prompt" per project. Keep entries append-only.
 > gate, v1.C Lindy verified, v1.D on-page SEO hardening (all done); v1.E keyword
 > research, v1.F n8n verify, v1.G Relay strings (planned, from lamill.toml todos).
 > Filled the v1 Versions row; project_version → v1.D.
+
+## 2026-09-17 — v1.E keyword research + Relay shutdown news
+
+> Start v1.E. Ahrefs blocked (trial, 0 API units) and GSC has no query data, so
+> ranked /fix/ candidates on labeled proxies (Google autocomplete + n8n community
+> forum view counts) in docs/keyword-research.md: n8n is where the demand is,
+> Lindy has ~no error search, Relay.app shut down (free 2026-08-15, paid
+> 2026-09-14). Operator: "dont drop relay - just update that it is shutting down
+> - add news" → optional `news` on PlatformMeta, rendered as a dated notice on
+> /fix/relay/ sourced to relay.app. v1.E ✅, v1.G 🚧.

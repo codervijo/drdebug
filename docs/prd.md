@@ -1,7 +1,7 @@
 ---
 project: drdebug.dev
 prd_version: 1
-project_version: v1.D
+project_version: v1.E
 status: planned
 owner: Vijo
 last_updated: 2026-09-17
@@ -47,9 +47,9 @@ Two-level versioning convention (canonical: `sites/portfolio/AI_AGENTS.md`):
 | **v1.B** | `/fix/` library | typed `errors` collection, `/fix/[platform]/[slug]/` routes, `verified` gate (`noindex` + draft banner), sourced Lindy/n8n drafts | ✅ |
 | **v1.C** | Lindy verified | 3 Lindy drafts verified live → indexed | ✅ |
 | **v1.D** | on-page SEO hardening | OG image, JSON-LD + visible FAQ, `/privacy` + `/contact`, sitemap excludes drafts, real 404, canonical fixes, IndexNow key, text-only fix pages | ✅ |
-| **v1.E** | keyword research | map moment-of-breakage queries to `/fix/` pages; prioritize next entries by volume × intent | planned |
+| **v1.E** | keyword research | map moment-of-breakage queries to `/fix/` pages; prioritize next entries by volume × intent — see `docs/keyword-research.md` (proxy data; Ahrefs re-run pending) | ✅ |
 | **v1.F** | n8n verified | verify 3 n8n drafts against live n8n → indexed | planned |
-| **v1.G** | Relay content | capture verbatim Relay error strings; replace `relay-placeholder.json` | planned |
+| **v1.G** | Relay content | Relay.app shut down (free 2026-08-15, paid 2026-09-14): shutdown news on `/fix/relay/` ✅; verbatim error strings uncapturable now — placeholder stays | 🚧 |
 
 ## 6. Open questions
 
